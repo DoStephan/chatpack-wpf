@@ -15,7 +15,7 @@ namespace Wpf
         public User(string name, string img)
         {
             _name = name;
-            _img = new BitmapImage(new Uri(@"C:\Users\stephan\Desktop\wp\Wpf\ProfilePicture\" + img));
+            _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\" + img));
         }//C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture
 
         #region Prop

@@ -53,7 +53,11 @@
         <TextBlock x:Name="tb" Grid.Row="3"/>
 
         <Image x:Name="pic" Grid.Row="3"/>
-        
+
+        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal">
+            <Button Content="2"/>
+            <TextBlock Text="sad" Margin="10" VerticalAlignment="Center"/>
+        </StackPanel>
          
     </Grid>
 </Window>

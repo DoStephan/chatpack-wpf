@@ -28,6 +28,7 @@ namespace Wpf
         //später wichtig
         private List<User> friendlist = new List<User>();
         //
+        private List<StackPanel> spList = new List<StackPanel>();
         private Color colorBlue = (Color)ColorConverter.ConvertFromString("#1d55af");
         private Color colorViolet = (Color)ColorConverter.ConvertFromString("#63085d");
         private SolidColorBrush bgColor = new SolidColorBrush();
@@ -65,7 +66,7 @@ namespace Wpf
             profPic.Height = 60;
             profPic.Width = 60;
 
-            List<StackPanel> spList = new List<StackPanel>();
+            
 
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
@@ -84,6 +85,11 @@ namespace Wpf
             sp = CreateUserInformation();
             //
         }
+        /// <summary>
+        /// Creates the two button remove and stats
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         private Border CreateCenterButton(string text)
         {
             Border border = new Border();
@@ -93,6 +99,11 @@ namespace Wpf
             border.Child = btn;
             return border;
         }
+        /// <summary>
+        /// Create the friends for the list and the listview
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="spList"></param>
         private void CreateSPItem(string path, List<StackPanel> spList)
         {
             StackPanel sp;
@@ -119,6 +130,7 @@ namespace Wpf
                 ellImg.Fill = imgBrush;
                 ellImg.Height = 56;
                 ellImg.Width = 56;
+                ellImg.Margin = new Thickness(10);
 
                 
                 sp.Children.Add(ellImg);
@@ -130,6 +142,16 @@ namespace Wpf
         }
         private void TypeTagNumber(object sender, RoutedEventArgs e)
         {
+            if (popUpTag.IsOpen)
+            {
+                addBtn.Content = "+";
+                addBtn.Width = 30;
+            }
+            else
+            {
+                addBtn.Content = "Cancel";
+                addBtn.Width = 60;
+            }
             popUpTag.IsOpen = !popUpTag.IsOpen;
         }
         //löschen
@@ -192,18 +214,27 @@ namespace Wpf
 
             return sp;
         }
+        /// <summary>
+        /// Shows the user's information e.g. name, message amount, tag, etc
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowUserInfo(object sender, RoutedEventArgs e)
         {
+
+            friendsView.UnselectAll();
             if (!IsInfoOn)
             {
-                
                 //Info.Children.Clear();
+                friendsView.ItemsSource = null;
+                friendsView.Background = null;
                 Info.Children.Add(sp);
                 Info.Background = new SolidColorBrush(Colors.White);
                 IsInfoOn = true;
             }
             else
             {
+                friendsView.ItemsSource = spList;
                 Info.Children.Clear();
                 Info.Background = new SolidColorBrush();
                 isInfoOn = false;
@@ -254,9 +285,12 @@ namespace Wpf
 
             TextBlock tb = new TextBlock();
             tb.FontSize = 16;
+            tb.VerticalAlignment = VerticalAlignment.Center;
+
             Ellipse el = new Ellipse();
             el.Width = 56;
             el.Height = 56;
+            el.Margin = new Thickness(10);
 
             Border remBtnBdr = new Border();
             remBtnBdr = CreateCenterButton("Remove");
@@ -288,19 +322,19 @@ namespace Wpf
           
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
 
-            plr.Load();
-            plr.Play();
+            //plr.Load();
+            //plr.Play();
 
         }
         private void ShowStats(object sender, RoutedEventArgs e)
         {
-            plr.Load();
-            plr.Play();
+            //plr.Load();
+            //plr.Play();
         }
         private void ChangeInformation(object sender, RoutedEventArgs e)
         {
-            plr.Load();
-            plr.Play();
+            //plr.Load();
+            //plr.Play();
 
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
             Info.Children.Clear();
@@ -317,15 +351,11 @@ namespace Wpf
             Info.Children.Add(sp);
             Info.Children.Add(profBtn);
 
-
-
         }
 
         private void OpenFileDiaForImg(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDia = new OpenFileDialog();
-
-            
 
             fileDia.Filter = "Images (*.png, *.jpg)|*.png; *jpg";
             if (fileDia.ShowDialog() == true)
