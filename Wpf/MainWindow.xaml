@@ -12,7 +12,7 @@
     <!--Icon="./Wpf/joy.png"-->
 
     <Window.Resources>
-        <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/zahnrad.jpg"/>
+        <Image x:Key="SetstingImg" Source="pack://siteoforigin:,,,/ButtonImage/zahnrad.png"/>
         <Image x:Key="CallImg" Source="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ButtonImage\yoshi.png"/>
         <!--"C:\Users\Stephan\Desktop\lsad\Wpf\ButtonImage\yoshi.png"-->
         <Style x:Key="MyButton" TargetType="Button">
