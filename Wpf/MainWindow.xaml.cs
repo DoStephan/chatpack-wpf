@@ -12,6 +12,8 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Media;
 
+//using System.Data;
+
 namespace Wpf
 {
     /// <summary>
@@ -269,8 +271,8 @@ namespace Wpf
                 return;
 
             DateTime dateTime = DateTime.Now;
-            //DateShow.Text += dateTime.ToString("hh:mm")+ "\n";
-            //ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+            
+            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
             InputBox.Text = String.Empty;
 
         }
@@ -286,9 +288,9 @@ namespace Wpf
                 if (InputBox.Text == "")
                     return;
 
-                //DateTime dateTime = DateTime.Now;
-                //ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-                //InputBox.Text = String.Empty;
+                DateTime dateTime = DateTime.Now;
+                ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+                InputBox.Text = String.Empty;
             }
         }
         /// <summary>
@@ -360,8 +362,11 @@ namespace Wpf
         {
             Button btn = sender as Button;
             btn.Content = "Chat";
+
             btn.Click -= ShowStats;
             btn.Click += ShowChat;
+
+            //ShowInputBlock = null;
 
             SeriesCollection = new SeriesCollection
             {
@@ -386,7 +391,7 @@ namespace Wpf
         /// <param name="e"></param>
         private void ShowChat(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            //ShowInputBlock.Background = new SolidColorBrush(Colors.White);
         }
 
         /// <summary>

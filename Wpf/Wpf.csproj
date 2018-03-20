@@ -113,7 +113,10 @@
     <Folder Include="ProfilePicture\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ButtonImage\yoshi.png" />
+    <Resource Include="ButtonImage\gear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ButtonImage\tele.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
