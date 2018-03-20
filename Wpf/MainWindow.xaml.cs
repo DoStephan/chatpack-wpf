@@ -19,6 +19,7 @@ namespace Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Fields
         SoundPlayer plr = new SoundPlayer("oof.wav");
 
         private const int INFO_COLUMN = 6;
@@ -35,8 +36,8 @@ namespace Wpf
 
         private StackPanel sp = new StackPanel();
         private Button profBtn = new Button();
-                 
-
+        #endregion
+        #region Propeties
         public bool IsInfoOn
         {
             get
@@ -49,10 +50,13 @@ namespace Wpf
             }
         }
         public object SeriersCollection { get; private set; }
+        public SeriesCollection SeriesCollection { get; set; }
+        public string[] Labels { get; set; }
+        public Func<object, object> Formatter { get; set; }
+        #endregion
         public MainWindow()
         {
             InitializeComponent();
-
             
             this.FontFamily = new FontFamily("Comic Sans MS");
 
@@ -65,8 +69,6 @@ namespace Wpf
             profPic.Fill = myBrush;
             profPic.Height = 60;
             profPic.Width = 60;
-
-            
 
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
@@ -97,6 +99,9 @@ namespace Wpf
             Button btn = new Button();
             btn.Content = text;
             border.Child = btn;
+            if (text == "Stats")
+                btn.Click += ShowStats;
+
             return border;
         }
         /// <summary>
@@ -140,17 +145,22 @@ namespace Wpf
 
             }
         }
+        /// <summary>
+        /// Opens tag popup for the tag-number input
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TypeTagNumber(object sender, RoutedEventArgs e)
         {
             if (popUpTag.IsOpen)
             {
-                addBtn.Content = "+";
-                addBtn.Width = 30;
+                (sender as Button).Content = "+";
+                (sender as Button).Width = 30;
             }
             else
             {
-                addBtn.Content = "Cancel";
-                addBtn.Width = 60;
+                (sender as Button).Content = "Cancel";
+                (sender as Button).Width = 60;
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
         }
@@ -260,10 +270,15 @@ namespace Wpf
 
             DateTime dateTime = DateTime.Now;
             //DateShow.Text += dateTime.ToString("hh:mm")+ "\n";
-            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+            //ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
             InputBox.Text = String.Empty;
 
         }
+        /// <summary>
+        /// Key handle for enter/sending
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnKeyEnterHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
@@ -271,11 +286,16 @@ namespace Wpf
                 if (InputBox.Text == "")
                     return;
 
-                DateTime dateTime = DateTime.Now;
-                ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-                InputBox.Text = String.Empty;
+                //DateTime dateTime = DateTime.Now;
+                //ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+                //InputBox.Text = String.Empty;
             }
         }
+        /// <summary>
+        /// Shows the friend's name and image with buttons
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void SelectFriend(object sender, SelectionChangedEventArgs e)
         {
             selFriendGrid.Children.Clear();
@@ -295,6 +315,7 @@ namespace Wpf
             Border remBtnBdr = new Border();
             remBtnBdr = CreateCenterButton("Remove");
             
+
             Border statsBtnBdr = new Border();
             statsBtnBdr = CreateCenterButton("Stats");
             Grid.SetColumn(statsBtnBdr, 1);
@@ -316,7 +337,11 @@ namespace Wpf
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
         }
-        
+        /// <summary>
+        /// Open setting popup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Settings(object sender, RoutedEventArgs e)
         {
           
@@ -326,11 +351,49 @@ namespace Wpf
             //plr.Play();
 
         }
+        /// <summary>
+        /// Shows the stats
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowStats(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
+            btn.Content = "Chat";
+            btn.Click -= ShowStats;
+            btn.Click += ShowChat;
+
+            SeriesCollection = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Values = new ChartValues<double> { 10, 50, 39, 50, 35 }
+                }
+            };
+
+            Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+            Formatter = value => value.ToString();
+
+            DataContext = this;
+
             //plr.Load();
             //plr.Play();
         }
+        /// <summary>
+        /// Shows the chat-history
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowChat(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Open the user's information for editing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeInformation(object sender, RoutedEventArgs e)
         {
             //plr.Load();
@@ -340,8 +403,7 @@ namespace Wpf
             Info.Children.Clear();
             Info.Background = new SolidColorBrush(Colors.White);
             IsInfoOn = true; ;
-
-            
+           
             profBtn.Width = 100;
             profBtn.Height = 70;
             profBtn.VerticalAlignment = VerticalAlignment.Center;
@@ -352,7 +414,11 @@ namespace Wpf
             Info.Children.Add(profBtn);
 
         }
-
+        /// <summary>
+        /// Open a filedialog for changing the image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenFileDiaForImg(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fileDia = new OpenFileDialog();
@@ -373,32 +439,23 @@ namespace Wpf
             else
                 bgColor.Color = colorViolet;
 
-
             btnBlue.IsEnabled = !btnBlue.IsEnabled;
             btnVio.IsEnabled = !btnVio.IsEnabled;
 
             center_Grid.Background = bgColor;
         }
-
+        /// <summary>
+        /// Unselect a friend by click somewhere else
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void friendsView_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //plr.Load();
-            //plr.Play();
-
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
             if (r.VisualHit.GetType() != typeof(ListBoxItem))
                 friendsView.UnselectAll();
         }
 
-        //private void Image_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    BitmapImage b = new BitmapImage();
-        //    b.BeginInit();
-        //    b.UriSource = new Uri(@"C:\Users\Stephan\Desktop\guiDemo\smittyWerbenJaggerManJensen.jpg");
-        //    b.EndInit();
-
-        //    Image image = sender as Image;
-        //    image.Source = b;
-        //}
+       
     }
 }

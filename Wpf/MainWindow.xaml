@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf"
-        
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="ChatPack" Height="Auto" Width="Auto" 
         MinHeight="600" MinWidth="950" WindowState="Maximized"
@@ -105,7 +105,6 @@
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
                           SelectionChanged="SelectFriend" Background="Transparent"
                            Grid.Row="1">
-
                 </ListView>
 
 
@@ -178,10 +177,7 @@
             
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
-
-            
-            
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
+            <!--<Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
                 <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
                       Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
@@ -189,7 +185,22 @@
                 </ScrollViewer>
 
             </Border>
+-->
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
+                <Grid>
+                    <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Week" Labels="{Binding Labels}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
 
+            
+            
             <Grid Grid.Column="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -211,10 +222,10 @@
                     FontSize="22" KeyDown="OnKeyEnterHandler">
                 </TextBox>
             </Border>
-
-            
         </Grid>
-        
+        <Grid x:Name="right_Grid" Grid.Column="2"/>
+
+
     </Grid>
 
 </Window>
