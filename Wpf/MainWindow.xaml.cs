@@ -391,6 +391,10 @@ namespace Wpf
         /// <param name="e"></param>
         private void ShowChat(object sender, RoutedEventArgs e)
         {
+            Button btn = sender as Button;
+            btn.Content = "ShowStats";
+            btn.Click -= ShowChat;
+            btn.Click += ShowStats;
             //ShowInputBlock.Background = new SolidColorBrush(Colors.White);
         }
 

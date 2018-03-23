@@ -192,15 +192,7 @@
             </Border>
 
 
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
-                <Grid x:Name="chat_Grid" >
-                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
-
-                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
+            
             
             
             
@@ -227,8 +219,18 @@
                 </TextBox>
             </Border>
         </Grid>
-        <Grid x:Name="right_Grid" Grid.Column="2"/>
+        <Grid x:Name="right_Grid" Grid.Column="2">
 
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
+                <Grid x:Name="chat_Grid" >
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
+
+                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
 
     </Grid>
 
