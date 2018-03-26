@@ -2,5 +2,7 @@ Gringo;Gringo44.png
 Guse;holUp.JPG
 Sharp;jazzStops.jpg
 David;monkey.png
-Remove;moon.jpg
-Diana;smittyWerbenJaggerManJensen.jpg
+Moon man;moon.jpg
+Smitty;smittyWerbenJaggerManJensen.jpg
+Max;max.JPG
+warau;sales.png

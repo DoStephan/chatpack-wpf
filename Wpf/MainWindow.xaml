@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf"
-        
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="ChatPack" Height="Auto" Width="Auto" 
         MinHeight="600" MinWidth="950" WindowState="Maximized"
@@ -12,9 +12,14 @@
     <!--Icon="./Wpf/joy.png"-->
 
     <Window.Resources>
+<<<<<<< HEAD
                                 <!--pack://siteoforigin:,,,/ButtonImage/zahnrad.png-->
         <Image x:Key="SetstingImg" Source="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ButtonImage\zahnrad2.png"/>
         <Image x:Key="CallImg" Source="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ButtonImage\phone2.png"/>
+=======
+        <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/gear.png"/>
+        <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/tele.png"/>
+>>>>>>> dc0ffb617b6d98c5febe368009962fdc361a27a6
         <!--"C:\Users\Stephan\Desktop\lsad\Wpf\ButtonImage\yoshi.png"-->
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -106,7 +111,6 @@
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
                           SelectionChanged="SelectFriend" Background="Transparent"
                            Grid.Row="1">
-
                 </ListView>
 
 
@@ -180,17 +184,25 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
 
-            
-            
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
-                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
-
-                    <TextBox x:Name="ShowInputBlock" FontSize="22" Background="white" IsReadOnly="True"/>
-                </ScrollViewer>
-
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
+                <Grid >
+                    <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Week" Labels="{Binding Labels}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
             </Border>
 
+
+            
+            
+            
+            
+            
             <Grid Grid.Column="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -212,10 +224,20 @@
                     FontSize="22" KeyDown="OnKeyEnterHandler">
                 </TextBox>
             </Border>
-
-            
         </Grid>
-        
+        <Grid x:Name="right_Grid" Grid.Column="2">
+
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
+                <Grid x:Name="chat_Grid" >
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
+
+                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+
     </Grid>
 
 </Window>

@@ -26,18 +26,10 @@ namespace Wpf
         {
             InitializeComponent();
 
-            
+            statsBtn.Click += ShowStats;    
            
             
-            SeriesCollection = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title = "2015",
-                    Values = new ChartValues<double> { 10, 50, 39, 50 }
-                }
-            };
-
+            
             //adding series will update and animate the chart automatically
             /*SeriesCollection.Add(new ColumnSeries
             {
@@ -48,10 +40,6 @@ namespace Wpf
             //also adding values updates and animates the chart automatically
             //SeriesCollection[1].Values.Add(48d);
 
-            Labels = new[] { "Maria", "Susan", "Charles", "Frida" };
-            Formatter = value => value.ToString("N");
-
-            DataContext = this;
 
             lv.SelectionChanged += Select;
 
@@ -63,6 +51,25 @@ namespace Wpf
 
 
             G.Children.Add(btn);
+
+        }
+
+        private void ShowStats(object sender, RoutedEventArgs e)
+        {
+            SeriesCollection = new SeriesCollection
+            {
+                new ColumnSeries
+                {
+                    Title = "2015",
+                    Values = new ChartValues<double> { 10, 50, 39, 50 }
+                }
+            };
+
+
+            Labels = new[] { "Monday", "Tuesday", "Wendesday", "Thursday", "Friday" };
+            Formatter = value => value.ToString();
+
+            DataContext = this;
 
         }
 
@@ -78,7 +85,6 @@ namespace Wpf
 
             }
         }
-
         private Border CreateRemoveBtn()
         {
             Border remBtnBdr = new Border();
@@ -90,7 +96,6 @@ namespace Wpf
             Grid.SetColumn(remBtnBdr, 0);
             return remBtnBdr;
         }
-
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> Formatter { get; set; }
@@ -102,5 +107,7 @@ namespace Wpf
             remBtnBdr = CreateRemoveBtn();
             G.Children.Add(remBtnBdr);
         }
+        
+        
     }
 }
