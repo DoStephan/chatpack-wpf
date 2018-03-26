@@ -113,17 +113,14 @@
     <Folder Include="ProfilePicture\" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Resource Include="ButtonImage\phone.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ButtonImage\zahnrad.png" />
-=======
     <Resource Include="ButtonImage\gear.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ButtonImage\tele.png" />
->>>>>>> dc0ffb617b6d98c5febe368009962fdc361a27a6
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
