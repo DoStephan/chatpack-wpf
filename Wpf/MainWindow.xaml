@@ -12,14 +12,6 @@
     <!--Icon="./Wpf/joy.png"-->
 
     <Window.Resources>
-<<<<<<< HEAD
-                                <!--pack://siteoforigin:,,,/ButtonImage/zahnrad.png-->
-        <Image x:Key="SetstingImg" Source="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ButtonImage\zahnrad2.png"/>
-        <Image x:Key="CallImg" Source="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ButtonImage\phone2.png"/>
-=======
-        <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/gear.png"/>
-        <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/tele.png"/>
->>>>>>> dc0ffb617b6d98c5febe368009962fdc361a27a6
         <!--"C:\Users\Stephan\Desktop\lsad\Wpf\ButtonImage\yoshi.png"-->
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
