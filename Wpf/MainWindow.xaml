@@ -68,7 +68,7 @@
                 </StackPanel>
             </Border>
 
-            <Grid x:Name="list_Grid" Grid.Row="1">
+            <Grid x:Name="list_Grid" Grid.Row="1" Background="Coral">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
