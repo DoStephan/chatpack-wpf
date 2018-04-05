@@ -38,7 +38,7 @@
     
     <!--Grid for the layout-->
     <!--<Grid Background="AntiqueWhite">-->
-    <Grid Background="#4286f4">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
@@ -101,7 +101,7 @@
 
                 </Popup>
 
-                <Grid x:Name="Info" Grid.Row="1" Background="AliceBlue"/>
+                <Grid x:Name="Info" Grid.Row="1"/>
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
                           SelectionChanged="SelectFriend" Background="Transparent"
                            Grid.Row="1">
@@ -177,8 +177,8 @@
             
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
-
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
+            
+            <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
                 <Grid >
                     <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
                         <lvc:CartesianChart.AxisX>
@@ -190,7 +190,16 @@
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
+            
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="14" >
+                <Grid x:Name="chat_Grid" >
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
+                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
 
             
             
@@ -220,16 +229,8 @@
             </Border>
         </Grid>
         <Grid x:Name="right_Grid" Grid.Column="2">
+            
 
-            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
-                <Grid x:Name="chat_Grid" >
-                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
-
-                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
         </Grid>
 
     </Grid>
