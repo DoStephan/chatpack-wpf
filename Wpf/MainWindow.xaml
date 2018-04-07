@@ -13,7 +13,9 @@
 
     <Window.Resources>
         <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/gear.png"/>
-        <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/tele.png"/>
+        <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/phone.png"/>
+        <Image x:Key="penImg" Source="pack://siteoforigin:,,,/ButtonImage/pen.png"/>
+        <Image x:Key="chatImg" Source="pack://siteoforigin:,,,/ButtonImage/chat.png"/>
         <!--"C:\Users\Stephan\Desktop\lsad\Wpf\ButtonImage\yoshi.png"-->
         <Style x:Key="MyButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -66,7 +68,7 @@
                 </StackPanel>
             </Border>
 
-            <Grid x:Name="list_Grid" Grid.Row="1">
+            <Grid x:Name="list_Grid" Grid.Row="1" Background="Coral">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
@@ -103,7 +105,7 @@
 
                 <Grid x:Name="Info" Grid.Row="1"/>
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
-                          SelectionChanged="SelectFriend" Background="Transparent"
+                          SelectionChanged="SelectFriend"
                            Grid.Row="1">
                 </ListView>
 
@@ -112,33 +114,31 @@
 
 
             <Button x:Name="btnSetting" Content="{StaticResource SettingImg}" Grid.Row="2" Margin="160,10,30,10" 
-                    Click="Settings" Style="{StaticResource MyButton}"/>
+                     Click="Settings" Style="{StaticResource MyButton}"/>
 
 
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
                                                 
             <Popup x:Name="popUpSetting" PlacementTarget="{Binding ElementName= btnSetting}"
                    Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True">
-                <TextBlock Height="180" Width="200" Background="Transparent" >
+                <TextBlock Height="200" Width="210" Background="Transparent" >
                     <StackPanel Orientation="Vertical"  Margin="10">
+                        
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Change color" VerticalAlignment="Center"/>
-                            <Border BorderThickness="8">
-                                <Button x:Name="btnBlue" Content="blue" Width="30" Click="ChangeColor"/>
-                            </Border>
-                            <Border BorderThickness="8">
-                                <Button x:Name="btnVio" Content="violet" Width="30" Click="ChangeColor"/>
-                            </Border>    
+                                <Button x:Name="btnBlue" Content="blue" Width="30" Click="ChangeColor" Margin="8"/>
+                                <Button x:Name="btnVio" Content="violet" Width="30" Click="ChangeColor" Margin="8"/>
                         </StackPanel>
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="change account info" VerticalAlignment="Center"/>
-                            <Border BorderThickness="8">
-                                <Button Content="+" Width="30" Click="ChangeInformation"/>
-                            </Border>
+                            <TextBlock Text="Change information" VerticalAlignment="Center"/>
+                                <Button Content="{StaticResource penImg}" Style="{StaticResource MyButton}"  Width="30" 
+                                        Click="ChangeInformation" Margin="8"/>
                         </StackPanel>
+                        
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Volume"/>
-                            <Slider Maximum="100" Width="130" />
+                            <TextBlock Text="Volume" VerticalAlignment="Center"/>
+                                <Slider Maximum="100" Width="130" Margin="8"/>
                         </StackPanel>
                             
                     </StackPanel>
@@ -201,10 +201,12 @@
                 </Grid>
             </Border>
 
-            
-            
-            
-            
+                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!---->
             
             <Grid Grid.Column="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
@@ -212,12 +214,11 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Border BorderThickness="0,14,0,14">
-                    <Button Width="40" Content="Send" Click="SendBtn" />
+                    <Button x:Name="sendBtn" Width="40" Content="Send" Click="SendingMessage" />
                 </Border>
                 <Border Grid.Column="1" BorderThickness="0,14,0,14">
                     <Button Width="40" Content="{StaticResource CallImg}" Style="{StaticResource MyButton}"/>
                 </Border>
-
             </Grid>
             
             <!--<Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Background="Cyan">
@@ -230,7 +231,15 @@
         </Grid>
         <Grid x:Name="right_Grid" Grid.Column="2">
             
+            <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" BorderThickness="14" >
+                <Grid x:Name="chat_Grid" >
+                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                      Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
+                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
         </Grid>
 
     </Grid>

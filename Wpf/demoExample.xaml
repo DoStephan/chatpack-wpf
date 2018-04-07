@@ -23,41 +23,21 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Button x:Name="btn" Content="."/>
 
-        <StackPanel Grid.Column="0" Grid.Row="2" 
-                   Grid.ColumnSpan="2">
-            <Button Content="asd"/>
-        </StackPanel>
-
-        <Grid Grid.ColumnSpan="3" Grid.RowSpan="2">
-            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Week" Labels="{Binding Labels}"></lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
+        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="2">
+            <TextBlock x:Name="tb" Background="Yellow" Text="sadada" Visibility="Visible">
+                
+            </TextBlock>
         </Grid>
-        <ListView x:Name="lv" Grid.Column="2" Grid.Row="2">
-            <ListViewItem>
-                Item 1
-            </ListViewItem>
-            <ListViewItem>
-                Item 2
-            </ListViewItem>
-            <ListViewItem>
-                Item 3
-            </ListViewItem>
-        </ListView>
-        <TextBlock x:Name="tb" Grid.Row="3"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Border  Background="Red" Height="12" VerticalAlignment="Top" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"></Border>
+        </Grid>
 
-        <Image x:Name="pic" Grid.Row="3"/>
 
-        <Button x:Name="statsBtn" Grid.Column="1" Grid.Row="3" 
-                Width="40" Height="40" Content="stats">
-            
-        </Button>
-         
     </Grid>
 </Window>

@@ -62,23 +62,26 @@ namespace Wpf
             InitializeComponent();
             
             this.FontFamily = new FontFamily("Comic Sans MS");
+            this.FontSize = 16;
 
             bgColor.Color = colorBlue;
             center_Grid.Background = bgColor;
 
+            #region User profile
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
             myBrush.Stretch = Stretch.UniformToFill;        //@"C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture\smittyWerbenJaggerManJensen.jpg"
             profPic.Fill = myBrush;
             profPic.Height = 60;
             profPic.Width = 60;
+            #endregion
+
 
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
 
             SetTextTitles();
             //FileRead("friends.txt");
-
             //CreateSPItem("friends.txt", spList);
 
             ReadFile("friends.txt");
@@ -90,13 +93,33 @@ namespace Wpf
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
-
-            //
             sp = CreateUserInformation();
             //
         }
+        /// <summary>
+        /// Creates the two button remove and stats
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private Border CreateCenterButton(string text)
+        {
+            Border border = new Border();
+            border.BorderThickness = new Thickness(12);
+            Button btn = new Button();
+            btn.Content = text;
+            border.Child = btn;
+            if (text == "Stats")
+                btn.Click += ShowStats;
 
-        private void CreateSPItem()
+            return border;
+
+
+        /// <summary>
+        /// Create the friends for the list and the listview
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="spList"></param>
+        private void CreateSPItem(string path, List<StackPanel> spList)
         {
             spList = new List<StackPanel>();
             TextBlock tb;
@@ -170,6 +193,11 @@ namespace Wpf
         /// </summary>
         /// <param name="imageName"></param>
         /// <returns></returns>
+        /// <summary>
+        /// Create round pictures
+        /// </summary>
+        /// <param name="imageName"></param>
+        /// <returns></returns>
         public Ellipse CreateEllipse(string imageName)
         {
             Ellipse pic = new Ellipse();
@@ -183,6 +211,10 @@ namespace Wpf
 
             return pic;
         }
+        /// <summary>
+        /// Creates the user infos
+        /// </summary>
+        /// <returns></returns>
         public StackPanel CreateUserInformation()
         {
             TextBox tb1 = new TextBox();
@@ -222,27 +254,27 @@ namespace Wpf
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// 
         private void ShowUserInfo(object sender, RoutedEventArgs e)
         {
-
-            friendsView.UnselectAll();
             if (!IsInfoOn)
             {
-                //Info.Children.Clear();
-                friendsView.ItemsSource = null;
-                friendsView.Background = null;
+                friendsView.Visibility = Visibility.Collapsed;              
                 Info.Children.Add(sp);
                 Info.Background = new SolidColorBrush(Colors.White);
                 IsInfoOn = true;
             }
             else
             {
-                friendsView.ItemsSource = spList;
+                friendsView.Visibility = Visibility.Visible;
                 Info.Children.Clear();
                 Info.Background = new SolidColorBrush();
                 isInfoOn = false;
             }
         }
+        /// <summary>
+        /// Set titles for user infos
+        /// </summary>
         public void SetTextTitles()
         {
             for (int i = 0; i < INFO_COLUMN; i++)
@@ -256,7 +288,12 @@ namespace Wpf
             infoUserBlock[4].Text = "Total messages sent: ";
             infoUserBlock[5].Text = "Total messages received:";
         }
-        private void SendBtn(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Send the message via "enter"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendingMessage(object sender, RoutedEventArgs e)
         {
             if (InputBox.Text == "")
                 return;
@@ -371,7 +408,23 @@ namespace Wpf
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
         }
+        private Border CreateCenterButton(string text)
+        {
+            Border border = new Border();
+            border.BorderThickness = new Thickness(12);
+            Button btn = new Button();
+            btn.Content = text;
+            border.Child = btn;
+            if (text == "Stats")
+                btn.Click += ShowStats;
+            //else
+            
+
+
+            return border;
+        }
         /// <summary>
+        {         
         /// Shows the stats
         /// </summary>
         /// <param name="sender"></param>
@@ -399,9 +452,6 @@ namespace Wpf
             Formatter = value => value.ToString();
 
             DataContext = this;
-
-            //plr.Load();
-            //plr.Play();
         }
         /// <summary>
         /// Shows the chat-history
@@ -446,6 +496,7 @@ namespace Wpf
             //plr.Load();
             //plr.Play();
 
+            friendsView.Visibility = Visibility.Collapsed;
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
             Info.Children.Clear();
             Info.Background = new SolidColorBrush(Colors.White);
