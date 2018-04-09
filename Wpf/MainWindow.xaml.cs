@@ -76,13 +76,10 @@ namespace Wpf
             profPic.Width = 60;
             #endregion
 
-
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
 
             SetTextTitles();
-            //FileRead("friends.txt");
-            //CreateSPItem("friends.txt", spList);
 
             ReadFile("friends.txt");
 
@@ -97,29 +94,11 @@ namespace Wpf
             //
         }
         /// <summary>
-        /// Creates the two button remove and stats
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private Border CreateCenterButton(string text)
-        {
-            Border border = new Border();
-            border.BorderThickness = new Thickness(12);
-            Button btn = new Button();
-            btn.Content = text;
-            border.Child = btn;
-            if (text == "Stats")
-                btn.Click += ShowStats;
-
-            return border;
-
-
-        /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
         /// <param name="path"></param>
         /// <param name="spList"></param>
-        private void CreateSPItem(string path, List<StackPanel> spList)
+        private void CreateSPItem()
         {
             spList = new List<StackPanel>();
             TextBlock tb;
@@ -151,13 +130,11 @@ namespace Wpf
 
                 spList.Add(sp);
             }
-        }
-       
+        }      
         /// <summary>
         /// Reads the files and sets the list
         /// </summary>
-        /// <param name="filepath"></param>
-        //löschen?
+        /// <param name="filepath"></param>    
         public void ReadFile(string filepath)
         {
             string[] row = File.ReadAllLines(filepath);
@@ -339,7 +316,7 @@ namespace Wpf
                 btn.Click += Removefriend;
 
             return border;
-        }
+    }
         /// <summary>
         /// Removes friend
         /// </summary>
@@ -408,23 +385,7 @@ namespace Wpf
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
         }
-        private Border CreateCenterButton(string text)
-        {
-            Border border = new Border();
-            border.BorderThickness = new Thickness(12);
-            Button btn = new Button();
-            btn.Content = text;
-            border.Child = btn;
-            if (text == "Stats")
-                btn.Click += ShowStats;
-            //else
-            
-
-
-            return border;
-        }
-        /// <summary>
-        {         
+        /// <summary>                 
         /// Shows the stats
         /// </summary>
         /// <param name="sender"></param>
@@ -529,7 +490,6 @@ namespace Wpf
                 profPic.Fill = temp;
             }
         }
-
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(btnBlue))
