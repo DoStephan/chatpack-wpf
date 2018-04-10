@@ -28,11 +28,10 @@ namespace Wpf
 
         private bool isInfoOn = false;
         private TextBlock[] infoUserBlock = new TextBlock[INFO_COLUMN];
+        //später wichtig
         private List<User> friendsList = new List<User>();
+        //
         private List<StackPanel> spList = new List<StackPanel>();
-
-        private Color[] blueColors = new Color[2];
-
         private Color colorBlue = (Color)ColorConverter.ConvertFromString("#1d55af");
         private Color colorViolet = (Color)ColorConverter.ConvertFromString("#63085d");
         private SolidColorBrush bgColor = new SolidColorBrush();
@@ -77,14 +76,22 @@ namespace Wpf
             profPic.Width = 60;
             #endregion
 
+
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
 
             SetTextTitles();
+            //FileRead("friends.txt");
+<<<<<<< HEAD
+
+            //CreateSPItem("friends.txt", spList);
 
             ReadFile("friends.txt");
 
             CreateSPItem();
+=======
+            CreateSPItem("friends.txt", spList);
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
             friendsView.ItemsSource = spList;
 
 
@@ -92,14 +99,24 @@ namespace Wpf
 
             btnBlue.IsEnabled = false;
             sp = CreateUserInformation();
+<<<<<<< HEAD
             //
         }
+
+        private void CreateSPItem()
+=======
+
+            
+
+        }
+
         /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
         /// <param name="path"></param>
         /// <param name="spList"></param>
-        private void CreateSPItem()
+        private void CreateSPItem(string path, List<StackPanel> spList)
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
         {
             spList = new List<StackPanel>();
             TextBlock tb;
@@ -131,11 +148,13 @@ namespace Wpf
 
                 spList.Add(sp);
             }
-        }      
+        }
+       
         /// <summary>
         /// Reads the files and sets the list
         /// </summary>
-        /// <param name="filepath"></param>    
+        /// <param name="filepath"></param>
+        //löschen?
         public void ReadFile(string filepath)
         {
             string[] row = File.ReadAllLines(filepath);
@@ -166,13 +185,26 @@ namespace Wpf
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
         }
+<<<<<<< HEAD
         /// <summary>
         /// Create round picture
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
+=======
+        //löschen
+        public void FileRead(string filepath)
+        {
+            string[] friendRow = File.ReadAllLines(filepath);
+            for (int i = 0; i < friendRow.Length; i++)
+            {
+                string[] elem = friendRow[i].Split(';');
+                User friend = new User(elem[0],elem[1]);
+                friendlist.Add(friend);
+               
+            }
+            friendlist.Sort();
+        }
         /// <summary>
         /// Create round pictures
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
         /// </summary>
         /// <param name="imageName"></param>
         /// <returns></returns>
@@ -317,7 +349,7 @@ namespace Wpf
                 btn.Click += Removefriend;
 
             return border;
-    }
+        }
         /// <summary>
         /// Removes friend
         /// </summary>
@@ -386,7 +418,34 @@ namespace Wpf
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
         }
-        /// <summary>                 
+        private Border CreateCenterButton(string text)
+        {
+            Border border = new Border();
+            border.BorderThickness = new Thickness(12);
+            Button btn = new Button();
+            btn.Content = text;
+            border.Child = btn;
+            if (text == "Stats")
+                btn.Click += ShowStats;
+            //else
+            
+
+
+            return border;
+        }
+        /// <summary>
+<<<<<<< HEAD
+=======
+        /// Open setting popup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Settings(object sender, RoutedEventArgs e)
+        {         
+            popUpSetting.IsOpen = !popUpSetting.IsOpen;
+        }
+        /// <summary>
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
         /// Shows the stats
         /// </summary>
         /// <param name="sender"></param>
@@ -400,7 +459,10 @@ namespace Wpf
             btn.Click += ShowChat;
 
             ShowInputBlock.Visibility = Visibility.Collapsed;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
 
             SeriesCollection = new SeriesCollection
             {
@@ -427,6 +489,7 @@ namespace Wpf
             btn.Click -= ShowChat;
             btn.Click += ShowStats;
             ShowInputBlock.Visibility = Visibility.Visible;
+<<<<<<< HEAD
 
         }
         /// <summary>
@@ -438,6 +501,14 @@ namespace Wpf
         {
           
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
+=======
+        }
+        /// <summary>
+        /// Creates the two button remove and stats
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+>>>>>>> 2989c8bd973c8cb3ffda717cda0495938a6967e1
 
             //plr.Load();
             //plr.Play();
@@ -491,6 +562,7 @@ namespace Wpf
                 profPic.Fill = temp;
             }
         }
+
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(btnBlue))
