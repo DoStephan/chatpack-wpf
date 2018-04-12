@@ -31,11 +31,10 @@ namespace Wpf
         private List<User> friendsList = new List<User>();
         private List<StackPanel> spList = new List<StackPanel>();
 
-        private Color[] blueColors = new Color[2];
-
-        private Color colorBlue = (Color)ColorConverter.ConvertFromString("#1d55af");
-        private Color colorViolet = (Color)ColorConverter.ConvertFromString("#63085d");
-        private SolidColorBrush bgColor = new SolidColorBrush();
+        private SolidColorBrush[] blueColors = new SolidColorBrush[3];
+        private SolidColorBrush[] greyColors = new SolidColorBrush[3];
+        string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
+        string[] grey = new string[] { "#5978f2", "#3455d8", "#4286f4" };
 
         private StackPanel sp = new StackPanel();
         private Button profileBtn = new Button();
@@ -62,12 +61,12 @@ namespace Wpf
         {
             InitializeComponent();
             
-            this.FontFamily = new FontFamily("Comic Sans MS");
             this.FontSize = 16;
 
-            bgColor.Color = colorBlue;
-            center_Grid.Background = bgColor;
+            InitColor();
 
+            SetBackgroundColor(blueColors);
+           
             #region User profile
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
@@ -83,17 +82,38 @@ namespace Wpf
             SetTextTitles();
 
             ReadFile("friends.txt");
-
             CreateSPItem();
             friendsView.ItemsSource = spList;
-
-
+            
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
             sp = CreateUserInformation();
-            //
         }
+
+        private void InitColor()
+        {
+            
+            Color c;
+            SolidColorBrush scb;
+            for (int i = 0; i < blueColors.Length; i++)
+            {
+                c = new Color();
+                c = (Color)ColorConverter.ConvertFromString(blueHex[i]);
+                scb = new SolidColorBrush();
+                scb.Color = c;
+                blueColors[i] = scb;
+            }
+
+        }
+
+        private void SetBackgroundColor(SolidColorBrush[] color)
+        {
+            left_Grid.Background = color[0];
+            center_Grid.Background = color[1];
+            right_Grid.Background = color[2];
+        }
+
         /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
@@ -493,15 +513,15 @@ namespace Wpf
         }
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
-            if (sender.Equals(btnBlue))
-                bgColor.Color = colorBlue;
-            else
-                bgColor.Color = colorViolet;
+            //if (sender.Equals(btnBlue))
+            //    bgColor.Color = colorBlue;
+            //else
+            //    bgColor.Color = colorViolet;
 
-            btnBlue.IsEnabled = !btnBlue.IsEnabled;
-            btnVio.IsEnabled = !btnVio.IsEnabled;
+            //btnBlue.IsEnabled = !btnBlue.IsEnabled;
+            //btnVio.IsEnabled = !btnVio.IsEnabled;
 
-            center_Grid.Background = bgColor;
+            //center_Grid.Background = bgColor;
         }
         /// <summary>
         /// Unselect a friend by click somewhere else
