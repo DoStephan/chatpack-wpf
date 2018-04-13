@@ -111,11 +111,8 @@
                           SelectionChanged="SelectFriend" Background="#4286f4"
                            Grid.Row="1">
                 </ListView>
-
-
             </Grid>
-
-
+            
             <Button x:Name="btnSetting" Grid.Row="2" Margin="160,10,30,10" Content="{StaticResource SettingImg}"  
                      Click="Settings" Style="{StaticResource MyButton}"/>
 

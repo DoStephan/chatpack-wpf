@@ -34,7 +34,7 @@ namespace Wpf
         private SolidColorBrush[] blueColors = new SolidColorBrush[3];
         private SolidColorBrush[] greyColors = new SolidColorBrush[3];
         string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
-        string[] grey = new string[] { "#5978f2", "#3455d8", "#4286f4" };
+        string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
 
         private StackPanel sp = new StackPanel();
         private Button profileBtn = new Button();
@@ -63,7 +63,8 @@ namespace Wpf
             
             this.FontSize = 16;
 
-            InitColor();
+            InitColor(blueColors, blueHex);
+            InitColor(greyColors, grey);
 
             SetBackgroundColor(blueColors);
            
@@ -91,20 +92,18 @@ namespace Wpf
             sp = CreateUserInformation();
         }
 
-        private void InitColor()
-        {
-            
+        private void InitColor(SolidColorBrush[] br, string[] colors)
+        {            
             Color c;
             SolidColorBrush scb;
-            for (int i = 0; i < blueColors.Length; i++)
+            for (int i = 0; i < br.Length; i++)
             {
                 c = new Color();
-                c = (Color)ColorConverter.ConvertFromString(blueHex[i]);
+                c = (Color)ColorConverter.ConvertFromString(colors[i]);
                 scb = new SolidColorBrush();
                 scb.Color = c;
-                blueColors[i] = scb;
+                br[i] = scb;
             }
-
         }
 
         private void SetBackgroundColor(SolidColorBrush[] color)
@@ -113,7 +112,16 @@ namespace Wpf
             center_Grid.Background = color[1];
             right_Grid.Background = color[2];
         }
-
+        private void ChangeColor(object sender, RoutedEventArgs e)
+        {
+            if (sender.Equals(btnBlue))
+                SetBackgroundColor(blueColors);
+            else
+                SetBackgroundColor(greyColors);
+        
+            btnBlue.IsEnabled = !btnBlue.IsEnabled;
+            btnVio.IsEnabled = !btnVio.IsEnabled;
+        }
         /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
@@ -510,19 +518,7 @@ namespace Wpf
                 temp.ImageSource = new BitmapImage(new Uri(fileDia.FileName));
                 profPic.Fill = temp;
             }
-        }
-        private void ChangeColor(object sender, RoutedEventArgs e)
-        {
-            //if (sender.Equals(btnBlue))
-            //    bgColor.Color = colorBlue;
-            //else
-            //    bgColor.Color = colorViolet;
-
-            //btnBlue.IsEnabled = !btnBlue.IsEnabled;
-            //btnVio.IsEnabled = !btnVio.IsEnabled;
-
-            //center_Grid.Background = bgColor;
-        }
+        }        
         /// <summary>
         /// Unselect a friend by click somewhere else
         /// </summary>
