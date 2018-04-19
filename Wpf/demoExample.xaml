@@ -29,7 +29,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid x:Name="G">
+    <Grid x:Name="G" Background="LightGray">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -48,8 +48,8 @@
             <Button x:Name="btn"  Width="50" Height="50"  Content="A" Style="{StaticResource roundBtn}"/>
         </Border>
 
-        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock x:Name="tb" Background="Yellow" Text="sadada" Visibility="Visible">
+        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="1">
+            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Visible">
                 
             </TextBlock>
         </Grid>
@@ -62,6 +62,24 @@
                      MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"/>
         </Grid>
 
+        <Grid x:Name="viewTextGrid" Grid.Row="2" Grid.Column="2">
+            <TextBlock x:Name="tbView">
+                
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="textGrid" Grid.Row="1" Grid.Column="2">
+            <TextBox x:Name="inBox" KeyDown="EnterKey">
+                
+            </TextBox>
+        </Grid>
+        
+        
+        <ListView x:Name="listv" Grid.Row="1">
+            <ListView.Items>
+                <TextBlock Text="1"/>
+                <TextBlock Text="2"/>
+            </ListView.Items>
+        </ListView>
 
     </Grid>
 </Window>

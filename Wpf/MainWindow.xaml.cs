@@ -170,7 +170,14 @@ namespace Wpf
             for (int i = 0; i < row.Length; i++)
             {
                 string[] elem = row[i].Split(';');
-                User friend = new User(elem[0], elem[1]);
+
+                User friend;
+                if (elem.Length == 1)
+                     friend = new User(elem[0]);
+
+                else
+                    friend = new User(elem[0], elem[1]);
+                
                 friendsList.Add(friend);
             }
             friendsList.Sort();
@@ -301,14 +308,7 @@ namespace Wpf
         /// <param name="e"></param>
         private void SendingMessage(object sender, RoutedEventArgs e)
         {
-            if (InputBox.Text == "")
-                return;
-
-            DateTime dateTime = DateTime.Now;
-            
-            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-            InputBox.Text = String.Empty;
-
+            SendMessage();
         }
         /// <summary>
         /// Key handle for enter/sending
@@ -318,14 +318,16 @@ namespace Wpf
         private void OnKeyEnterHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
-            {
-                if (InputBox.Text == "")
-                    return;
+                SendMessage();
+        }
+        public void SendMessage()
+        {
+            if (InputBox.Text == "")
+                return;
 
-                DateTime dateTime = DateTime.Now;
-                ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-                InputBox.Text = String.Empty;
-            }
+            DateTime dateTime = DateTime.Now;
+            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+            InputBox.Text = String.Empty;
         }
         /// <summary>
         /// Creates the two button remove and stats
