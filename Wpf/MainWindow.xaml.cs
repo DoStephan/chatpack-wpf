@@ -202,29 +202,6 @@ namespace Wpf
             popUpTag.IsOpen = !popUpTag.IsOpen;
         }
         /// <summary>
-        /// Create round picture
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
-        /// <summary>
-        /// Create round pictures
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
-        public Ellipse CreateEllipse(string imageName)
-        {
-            Ellipse pic = new Ellipse();
-            ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\project\guiDemo\Wpf\ProfilePicture\" + imageName));
-            myBrush.Stretch = Stretch.UniformToFill;
-            pic.Height = 60;
-            pic.Width = 60;
-
-            pic.Fill = myBrush;
-
-            return pic;
-        }
-        /// <summary>
         /// Creates the user infos
         /// </summary>
         /// <returns></returns>
@@ -325,9 +302,20 @@ namespace Wpf
             if (InputBox.Text == "")
                 return;
 
+
             DateTime dateTime = DateTime.Now;
-            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if(friendsList[i].Name == currName)
+                {
+                    friendsList[i].Message = dateTime.ToString("hh:mm    ")+InputBox.Text + "\n";
+                    break;
+                }
+            }
+            //ShowInputBlock.Text += friendsList[i].Message;
+            ShowInputBlock.Text += dateTime.ToString("hh:mm    ")+InputBox.Text +"\n";
             InputBox.Text = String.Empty;
+            scrollView.ScrollToEnd();
         }
         /// <summary>
         /// Creates the two button remove and stats
@@ -388,7 +376,35 @@ namespace Wpf
             el.Width = 56;
             el.Height = 56;
             el.Margin = new Thickness(10);
+            //read selected friend
+            //save the select elem to tempSP
+            tempSP = (StackPanel)friendsView.SelectedItem;
+            if (tempSP == null)
+            {    
+                remStatGrid.Children.Clear();
+                return;
+            }
+            //set "selectSP" with tempSP's data
+            tb.Text = (tempSP.Children[1] as TextBlock).Text;
+            el.Fill = (tempSP.Children[0] as Ellipse).Fill;
 
+            //
+            currName = tb.Text;
+            ShowInputBlock.Clear();
+            int tempIndex = 0;
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if (friendsList[i].Name == currName)
+                    tempIndex = i;
+            }
+            ShowInputBlock.Text = friendsList[tempIndex].Message;
+
+            sp.Children.Add(el);
+            sp.Children.Add(tb);
+            
+            selFriendGrid.Children.Add(sp);
+
+            //add buttons
             Border remBtnBdr = new Border();
             remBtnBdr = CreateCenterButton("Remove");
 
@@ -396,22 +412,6 @@ namespace Wpf
             statsBtnBdr = CreateCenterButton("Stats");
             Grid.SetColumn(statsBtnBdr, 1);
 
-            //read selected friend
-            tempSP = (StackPanel)friendsView.SelectedItem;
-            if (tempSP == null)
-            {    
-                remStatGrid.Children.Clear();
-                return;
-            }
-            tb.Text = (tempSP.Children[1] as TextBlock).Text;
-            el.Fill = (tempSP.Children[0] as Ellipse).Fill;
-
-            currName = tb.Text;
-
-            sp.Children.Add(el);
-            sp.Children.Add(tb);
-            
-            selFriendGrid.Children.Add(sp);
 
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
