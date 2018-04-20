@@ -7,8 +7,29 @@
         mc:Ignorable="d"
          xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="demoExample" Height="300" Width="300">
-    
-     <Grid x:Name="G">
+
+    <Window.Resources>
+        <Style x:Key="roundBtn" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="25" Margin="3" BorderThickness="1" 
+                                BorderBrush="DarkGray" Background="LightGray">
+                            <!-- ContentPresenter properties. Set the content source as the content from each control define below -->
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="G" Background="LightGray">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -23,41 +44,42 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Border BorderThickness="10">
+            <Button x:Name="btn"  Width="50" Height="50"  Content="A" Style="{StaticResource roundBtn}"/>
+        </Border>
 
-        <StackPanel Grid.Column="0" Grid.Row="2" 
-                   Grid.ColumnSpan="2">
-            <Button Content="asd"/>
-        </StackPanel>
-
-        <Grid Grid.ColumnSpan="3" Grid.RowSpan="2">
-            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
-                <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Title="Week" Labels="{Binding Labels}"></lvc:Axis>
-                </lvc:CartesianChart.AxisX>
-                <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Messages" LabelFormatter="{Binding Formatter}"></lvc:Axis>
-                </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
+        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="1">
+            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Visible">
+                
+            </TextBlock>
         </Grid>
-        <ListView x:Name="lv" Grid.Column="2" Grid.Row="2">
-            <ListViewItem>
-                Item 1
-            </ListViewItem>
-            <ListViewItem>
-                Item 2
-            </ListViewItem>
-            <ListViewItem>
-                Item 3
-            </ListViewItem>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Border  Background="Red" Height="12" VerticalAlignment="Top" 
+                     MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"/>
+        </Grid>
+
+        <Grid x:Name="viewTextGrid" Grid.Row="2" Grid.Column="2">
+            <TextBlock x:Name="tbView">
+                
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="textGrid" Grid.Row="1" Grid.Column="2">
+            <TextBox x:Name="inBox" KeyDown="EnterKey">
+                
+            </TextBox>
+        </Grid>
+        
+        
+        <ListView x:Name="listv" Grid.Row="1">
+            <ListView.Items>
+                <TextBlock Text="1"/>
+                <TextBlock Text="2"/>
+            </ListView.Items>
         </ListView>
-        <TextBlock x:Name="tb" Grid.Row="3"/>
 
-        <Image x:Name="pic" Grid.Row="3"/>
-
-        <Button x:Name="statsBtn" Grid.Column="1" Grid.Row="3" 
-                Width="40" Height="40" Content="stats">
-            
-        </Button>
-         
     </Grid>
 </Window>
