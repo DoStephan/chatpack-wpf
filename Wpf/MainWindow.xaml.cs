@@ -542,10 +542,5 @@ namespace Wpf
         {
             ppuSetting.IsOpen = false;
         }
-        /*
-"#4286f4"
-
-
-*/
     }
 }
