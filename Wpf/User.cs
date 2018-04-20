@@ -25,12 +25,6 @@ namespace Wpf
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\" + img));
         }//C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture
 
-        public void AddMessageString(string str)
-        {
-            _message += String.Format(": ",str);
-        }
-
-
         #region Prop
         public string Name
         {

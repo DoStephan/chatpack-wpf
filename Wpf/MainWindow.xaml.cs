@@ -532,10 +532,20 @@ namespace Wpf
             if (r.VisualHit.GetType() != typeof(ListBoxItem))
                 friendsView.UnselectAll();
         }
+
+        private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ppuSetting.IsOpen = true;
+        }
+
+        private void btnSetting_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ppuSetting.IsOpen = false;
+        }
         /*
-         "#4286f4"
-         
-         
-         */
+"#4286f4"
+
+
+*/
     }
 }

@@ -112,9 +112,14 @@
                            Grid.Row="1">
                 </ListView>
             </Grid>
-            
+
             <Button x:Name="btnSetting" Grid.Row="2" Margin="160,10,30,10" Content="{StaticResource SettingImg}"  
-                     Click="Settings" Style="{StaticResource MyButton}"/>
+                     Click="Settings" Style="{StaticResource MyButton}" MouseEnter="btnSetting_MouseEnter" MouseLeave="btnSetting_MouseLeave"/>
+            <Popup x:Name="ppuSetting" PlacementTarget="{Binding ElementName= btnSetting}" Placement="Right">
+                <TextBlock Text="Setting" Background="White"/>
+            </Popup>
+
+
 
 
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
