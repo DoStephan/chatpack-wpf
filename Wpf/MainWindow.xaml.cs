@@ -24,10 +24,8 @@ namespace Wpf
         #region Fields
         SoundPlayer plr = new SoundPlayer("oof.wav");
 
-        private const int INFO_COLUMN = 6;
-
         private bool isInfoOn = false;
-        private TextBlock[] infoUserBlock = new TextBlock[INFO_COLUMN];
+
         private List<User> friendsList = new List<User>();
         private List<StackPanel> spList = new List<StackPanel>();
 
@@ -36,8 +34,9 @@ namespace Wpf
         string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
         string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
 
-        private StackPanel sp = new StackPanel();
         private Button profileBtn = new Button();
+        private Button saveBtn = new Button();
+        private Button cancalBtn = new Button();
         private String currName;
         #endregion
         #region Propeties
@@ -80,8 +79,6 @@ namespace Wpf
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
 
-            SetTextTitles();
-
             ReadFile("friends.txt");
             CreateSPItem();
             friendsView.ItemsSource = spList;
@@ -89,7 +86,6 @@ namespace Wpf
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
-            sp = CreateUserInformation();
         }
 
         private void InitColor(SolidColorBrush[] br, string[] colors)
@@ -200,84 +196,7 @@ namespace Wpf
                 (sender as Button).Width = 60;
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
-        }
-        /// <summary>
-        /// Creates the user infos
-        /// </summary>
-        /// <returns></returns>
-        public StackPanel CreateUserInformation()
-        {
-            TextBox tb1 = new TextBox();
-            tb1.Text = "Smitty";
-            tb1.IsEnabled = false;
-            //tb1.IsReadOnly = true;
-            StackPanel sp1 = new StackPanel();
-            sp1.Orientation = Orientation.Horizontal;
-            sp1.Children.Add(infoUserBlock[0]);
-            sp1.Children.Add(tb1);
-
-            TextBlock tb2 = new TextBlock();
-            tb2.Text = "#1841";
-            StackPanel sp2 = new StackPanel();
-            sp2.Orientation = Orientation.Horizontal;
-            sp2.Children.Add(infoUserBlock[1]);
-            sp2.Children.Add(tb2);
-
-            TextBlock tb3 = new TextBlock();
-            tb3.Text = "01.06.2017";
-            StackPanel sp3 = new StackPanel();
-            sp3.Orientation = Orientation.Horizontal;
-            sp3.Children.Add(infoUserBlock[2]);
-            sp3.Children.Add(tb3);
-
-            StackPanel sp = new StackPanel();
-            sp.Orientation = Orientation.Vertical;
-            sp.Margin = new Thickness(0, 100, 0, 0);
-            sp.Children.Add(sp1);
-            sp.Children.Add(sp2);
-            sp.Children.Add(sp3);
-
-            return sp;
-        }
-        /// <summary>
-        /// Shows the user's information e.g. name, message amount, tag, etc
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// 
-        private void ShowUserInfo(object sender, RoutedEventArgs e)
-        {
-            if (!IsInfoOn)
-            {
-                friendsView.Visibility = Visibility.Collapsed;              
-                Info.Children.Add(sp);
-                Info.Background = new SolidColorBrush(Colors.White);
-                IsInfoOn = true;
-            }
-            else
-            {
-                friendsView.Visibility = Visibility.Visible;
-                Info.Children.Clear();
-                Info.Background = new SolidColorBrush();
-                isInfoOn = false;
-            }
-        }
-        /// <summary>
-        /// Set titles for user infos
-        /// </summary>
-        public void SetTextTitles()
-        {
-            for (int i = 0; i < INFO_COLUMN; i++)
-            {
-                infoUserBlock[i] = new TextBlock();
-            }
-            infoUserBlock[0].Text = "Username: ";
-            infoUserBlock[1].Text = "Tag-Number: ";
-            infoUserBlock[2].Text = "Created since: ";
-            infoUserBlock[3].Text = "Friends amount: ";
-            infoUserBlock[4].Text = "Total messages sent: ";
-            infoUserBlock[5].Text = "Total messages received:";
-        }
+        }         
         /// <summary>
         /// Send the message via "enter"
         /// </summary>
@@ -457,7 +376,6 @@ namespace Wpf
             btn.Click -= ShowChat;
             btn.Click += ShowStats;
             ShowInputBlock.Visibility = Visibility.Visible;
-
         }
         /// <summary>
         /// Open setting popup
@@ -465,45 +383,92 @@ namespace Wpf
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Settings(object sender, RoutedEventArgs e)
-        {
-          
+        {      
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
-
-            //plr.Load();
-            //plr.Play();
-
         }
         /// <summary>
-        /// Shows the stats
+        /// Set the information for the user e.g. username, ...
+        /// </summary>
+        public void SetInformation()
+        {
+            friendsView.Visibility = Visibility.Collapsed;
+            Info.Background = new SolidColorBrush(Colors.White);
+            tBoxEditName.Text = tBoxName.Text;
+            lbTag.Content = "#1236";
+            lbDate.Content = DateTime.Now.ToString();
+            lbTotalFriends.Content = friendsList.Count;
+        }
+        /// <summary>
+        /// Shows the user's information e.g. name, message amount, tag, etc
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// 
+        private void ShowUserInfo(object sender, RoutedEventArgs e)
+        {
+            if (!IsInfoOn)
+            {
+                SetInformation();
+                IsInfoOn = true;
+            }
+            else
+            {
+                friendsView.Visibility = Visibility.Visible;
+                DeleteButtonInInfo();
+                isInfoOn = false;
+            }
+        }
         /// <summary>
-        /// Open the user's information for editing
+        /// Change the user information
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ChangeInformation(object sender, RoutedEventArgs e)
         {
-            //plr.Load();
-            //plr.Play();
-
-            friendsView.Visibility = Visibility.Collapsed;
+            if (!isInfoOn)
+            {
+                SetInformation();
+                IsInfoOn = true;
+            }
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
-            Info.Children.Clear();
-            Info.Background = new SolidColorBrush(Colors.White);
-            IsInfoOn = true; ;
-           
+            tBoxEditName.IsReadOnly = false;
+
             profileBtn.Width = 100;
-            profileBtn.Height = 70;
+            profileBtn.Height = 35;
             profileBtn.VerticalAlignment = VerticalAlignment.Center;
             profileBtn.Content = "Change Image";
             profileBtn.Click += OpenFileDiaForImg;
-            
-            Info.Children.Add(sp);
-            Info.Children.Add(profileBtn);
+            Grid.SetRow(profileBtn, 4);
+            Grid.SetColumnSpan(profileBtn, 2);
 
+            saveBtn.Content = "save";
+            saveBtn.Click += SaveInfo;
+            Grid.SetRow(saveBtn,5);
+            
+
+            
+            Info.Children.Add(profileBtn);
+            Info.Children.Add(saveBtn);
         }
+        /// <summary>
+        /// Delete the button, which pop up by editing the infos
+        /// </summary>
+        public void DeleteButtonInInfo()
+        {
+            while (Info.Children.Count > 8)
+            {
+                Info.Children.RemoveAt(8);
+            }
+        }
+        private void SaveInfo(object sender, RoutedEventArgs e)
+        {
+            tBoxName.Text = tBoxEditName.Text;
+            tBoxEditName.IsReadOnly = true;
+            DeleteButtonInInfo();
+        }
+
+
+
         /// <summary>
         /// Open a filedialog for changing the image
         /// </summary>
@@ -522,7 +487,7 @@ namespace Wpf
             }
         }        
         /// <summary>
-        /// Unselect a friend by click somewhere else
+        /// Unselect a friend by clicking somewhere else
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -530,7 +495,11 @@ namespace Wpf
         {
             HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
             if (r.VisualHit.GetType() != typeof(ListBoxItem))
+            {
                 friendsView.UnselectAll();
+            }
+                
+
         }
 
         private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
