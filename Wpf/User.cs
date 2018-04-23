@@ -12,7 +12,14 @@ namespace Wpf
     {
         private string _name;
         private BitmapImage _img;
-        public User(string name, string img)
+        private string _message = "";
+
+        public User(string name)
+        {
+            _name = name;
+            _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\default.png"));
+        }
+        public User(string name, string img):this(name)
         {
             _name = name;
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\" + img));
@@ -41,6 +48,18 @@ namespace Wpf
             set
             {
                 _img = value;
+            }
+        }
+
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message += value;
             }
         }
         #endregion

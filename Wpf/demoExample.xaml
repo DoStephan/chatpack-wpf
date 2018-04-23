@@ -7,8 +7,29 @@
         mc:Ignorable="d"
          xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="demoExample" Height="300" Width="300">
-    
-     <Grid x:Name="G">
+
+    <Window.Resources>
+        <Style x:Key="roundBtn" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="25" Margin="3" BorderThickness="1" 
+                                BorderBrush="DarkGray" Background="LightGray">
+                            <!-- ContentPresenter properties. Set the content source as the content from each control define below -->
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="G" Background="LightGray">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -23,10 +44,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="btn" Content="."/>
+        <Border BorderThickness="10">
+            <Button x:Name="btn"  Width="50" Height="50"  Content="A" Style="{StaticResource roundBtn}"/>
+        </Border>
 
-        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock x:Name="tb" Background="Yellow" Text="sadada" Visibility="Visible">
+        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="1">
+            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Visible">
                 
             </TextBlock>
         </Grid>
@@ -35,9 +58,28 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
-            <Border  Background="Red" Height="12" VerticalAlignment="Top" MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"></Border>
+            <Border  Background="Red" Height="12" VerticalAlignment="Top" 
+                     MouseEnter="StackPanel_MouseEnter" MouseLeave="StackPanel_MouseLeave"/>
         </Grid>
 
+        <Grid x:Name="viewTextGrid" Grid.Row="2" Grid.Column="2">
+            <TextBlock x:Name="tbView">
+                
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="textGrid" Grid.Row="1" Grid.Column="2">
+            <TextBox x:Name="inBox" KeyDown="EnterKey">
+                
+            </TextBox>
+        </Grid>
+        
+        
+        <ListView x:Name="listv" Grid.Row="1">
+            <ListView.Items>
+                <TextBlock Text="1"/>
+                <TextBlock Text="2"/>
+            </ListView.Items>
+        </ListView>
 
     </Grid>
 </Window>

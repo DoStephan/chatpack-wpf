@@ -28,16 +28,17 @@ namespace Wpf
 
         private bool isInfoOn = false;
         private TextBlock[] infoUserBlock = new TextBlock[INFO_COLUMN];
-        //später wichtig
-        private List<User> friendlist = new List<User>();
-        //
+        private List<User> friendsList = new List<User>();
         private List<StackPanel> spList = new List<StackPanel>();
-        private Color colorBlue = (Color)ColorConverter.ConvertFromString("#1d55af");
-        private Color colorViolet = (Color)ColorConverter.ConvertFromString("#63085d");
-        private SolidColorBrush bgColor = new SolidColorBrush();
+
+        private SolidColorBrush[] blueColors = new SolidColorBrush[3];
+        private SolidColorBrush[] greyColors = new SolidColorBrush[3];
+        string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
+        string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
 
         private StackPanel sp = new StackPanel();
-        private Button profBtn = new Button();
+        private Button profileBtn = new Button();
+        private String currName;
         #endregion
         #region Propeties
         public bool IsInfoOn
@@ -60,12 +61,13 @@ namespace Wpf
         {
             InitializeComponent();
             
-            this.FontFamily = new FontFamily("Comic Sans MS");
             this.FontSize = 16;
 
-            bgColor.Color = colorBlue;
-            center_Grid.Background = bgColor;
+            InitColor(blueColors, blueHex);
+            InitColor(greyColors, grey);
 
+            SetBackgroundColor(blueColors);
+           
             #region User profile
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
@@ -75,64 +77,110 @@ namespace Wpf
             profPic.Width = 60;
             #endregion
 
-
             popUpSetting.VerticalOffset = -btnSetting.ActualHeight;
             popUpSetting.HorizontalOffset = -btnSetting.ActualWidth;
 
             SetTextTitles();
-            //FileRead("friends.txt");
-            CreateSPItem("friends.txt", spList);
-            friendsView.ItemsSource = spList;
 
+            ReadFile("friends.txt");
+            CreateSPItem();
+            friendsView.ItemsSource = spList;
+            
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
             sp = CreateUserInformation();
-
-            
-
         }
 
+        private void InitColor(SolidColorBrush[] br, string[] colors)
+        {            
+            Color c;
+            SolidColorBrush scb;
+            for (int i = 0; i < br.Length; i++)
+            {
+                c = new Color();
+                c = (Color)ColorConverter.ConvertFromString(colors[i]);
+                scb = new SolidColorBrush();
+                scb.Color = c;
+                br[i] = scb;
+            }
+        }
+
+        private void SetBackgroundColor(SolidColorBrush[] color)
+        {
+            left_Grid.Background = color[0];
+            center_Grid.Background = color[1];
+            right_Grid.Background = color[2];
+        }
+        private void ChangeColor(object sender, RoutedEventArgs e)
+        {
+            if (sender.Equals(btnBlue))
+                SetBackgroundColor(blueColors);
+            else
+                SetBackgroundColor(greyColors);
+        
+            btnBlue.IsEnabled = !btnBlue.IsEnabled;
+            btnVio.IsEnabled = !btnVio.IsEnabled;
+        }
         /// <summary>
         /// Create the friends for the list and the listview
         /// </summary>
         /// <param name="path"></param>
         /// <param name="spList"></param>
-        private void CreateSPItem(string path, List<StackPanel> spList)
+        private void CreateSPItem()
         {
-            StackPanel sp;
+            spList = new List<StackPanel>();
             TextBlock tb;
+            StackPanel sp;
 
-            string[] friendrow = File.ReadAllLines(path);
-            for (int i = 0; i < friendrow.Length; i++)
+            for (int i = 0; i < friendsList.Count; i++)
             {
-                string[] elem = friendrow[i].Split(';');
-                User friend = new User(elem[0],elem[1]);
-
-                sp = new StackPanel();
-                sp.Orientation = Orientation.Horizontal;
-
+                //name
                 tb = new TextBlock();
                 tb.FontSize = 16;
-                tb.Text = friend.Name;
                 tb.VerticalAlignment = VerticalAlignment.Center;
+                tb.Text = friendsList[i].Name;
 
+                //picture
                 Ellipse ellImg = new Ellipse();
-                ImageBrush imgBrush= new ImageBrush();
-                imgBrush.ImageSource = friend.Img;
+                ImageBrush imgBrush = new ImageBrush();
+                imgBrush.ImageSource = friendsList[i].Img;
                 imgBrush.Stretch = Stretch.UniformToFill;
                 ellImg.Fill = imgBrush;
                 ellImg.Height = 56;
                 ellImg.Width = 56;
                 ellImg.Margin = new Thickness(10);
 
-                
+                //add to Stackpanel
+                sp = new StackPanel();
+                sp.Orientation = Orientation.Horizontal;
                 sp.Children.Add(ellImg);
                 sp.Children.Add(tb);
-                
-                spList.Add(sp);
 
+                spList.Add(sp);
             }
+        }      
+        /// <summary>
+        /// Reads the files and sets the list
+        /// </summary>
+        /// <param name="filepath"></param>    
+        public void ReadFile(string filepath)
+        {
+            string[] row = File.ReadAllLines(filepath);
+            for (int i = 0; i < row.Length; i++)
+            {
+                string[] elem = row[i].Split(';');
+
+                User friend;
+                if (elem.Length == 1)
+                     friend = new User(elem[0]);
+
+                else
+                    friend = new User(elem[0], elem[1]);
+                
+                friendsList.Add(friend);
+            }
+            friendsList.Sort();
         }
         /// <summary>
         /// Opens tag popup for the tag-number input
@@ -152,37 +200,6 @@ namespace Wpf
                 (sender as Button).Width = 60;
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
-        }
-        //löschen
-        public void FileRead(string filepath)
-        {
-            string[] friendRow = File.ReadAllLines(filepath);
-            for (int i = 0; i < friendRow.Length; i++)
-            {
-                string[] elem = friendRow[i].Split(';');
-                User friend = new User(elem[0],elem[1]);
-                friendlist.Add(friend);
-               
-            }
-            friendlist.Sort();
-        }
-        /// <summary>
-        /// Create round pictures
-        /// </summary>
-        /// <param name="imageName"></param>
-        /// <returns></returns>
-        public Ellipse CreateEllipse(string imageName)
-        {
-            Ellipse pic = new Ellipse();
-            ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\project\guiDemo\Wpf\ProfilePicture\" + imageName));
-            myBrush.Stretch = Stretch.UniformToFill;
-            pic.Height = 60;
-            pic.Width = 60;
-
-            pic.Fill = myBrush;
-
-            return pic;
         }
         /// <summary>
         /// Creates the user infos
@@ -268,14 +285,7 @@ namespace Wpf
         /// <param name="e"></param>
         private void SendingMessage(object sender, RoutedEventArgs e)
         {
-            if (InputBox.Text == "")
-                return;
-
-            DateTime dateTime = DateTime.Now;
-            
-            ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-            InputBox.Text = String.Empty;
-
+            SendMessage();
         }
         /// <summary>
         /// Key handle for enter/sending
@@ -285,17 +295,67 @@ namespace Wpf
         private void OnKeyEnterHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
-            {
-                if (InputBox.Text == "")
-                    return;
+                SendMessage();
+        }
+        public void SendMessage()
+        {
+            if (InputBox.Text == "")
+                return;
 
-                DateTime dateTime = DateTime.Now;
-                ShowInputBlock.Text += dateTime.ToString("hh:mm    ") + InputBox.Text + "\n";
-                InputBox.Text = String.Empty;
+
+            DateTime dateTime = DateTime.Now;
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if(friendsList[i].Name == currName)
+                {
+                    friendsList[i].Message = dateTime.ToString("hh:mm    ")+InputBox.Text + "\n";
+                    break;
+                }
             }
+            //ShowInputBlock.Text += friendsList[i].Message;
+            ShowInputBlock.Text += dateTime.ToString("hh:mm    ")+InputBox.Text +"\n";
+            InputBox.Text = String.Empty;
+            scrollView.ScrollToEnd();
         }
         /// <summary>
-        /// Shows the friend's name and image with buttons
+        /// Creates the two button remove and stats
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private Border CreateCenterButton(string text)
+        {
+            Border border = new Border();
+            border.BorderThickness = new Thickness(12);
+            Button btn = new Button();
+            btn.Content = text;
+            border.Child = btn;
+            if (text == "Stats")
+                btn.Click += ShowStats;
+            else
+                btn.Click += Removefriend;
+
+            return border;
+    }
+        /// <summary>
+        /// Removes friend
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Removefriend(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if (friendsList[i].Name == currName)
+                {
+                    friendsList.Remove(friendsList[i]);
+                    break;
+                }
+            }
+            CreateSPItem();            
+            friendsView.ItemsSource = spList;
+        }
+        /// <summary>
+        /// Shows the friend's name, image and 2 buttons
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -306,65 +366,57 @@ namespace Wpf
             StackPanel sp = new StackPanel();
             sp.Orientation = Orientation.Horizontal;
 
+            //Create name
             TextBlock tb = new TextBlock();
             tb.FontSize = 16;
             tb.VerticalAlignment = VerticalAlignment.Center;
 
+            //Create picture
             Ellipse el = new Ellipse();
             el.Width = 56;
             el.Height = 56;
             el.Margin = new Thickness(10);
-
-            Border remBtnBdr = new Border();
-            remBtnBdr = CreateCenterButton("Remove");
-            
-
-            Border statsBtnBdr = new Border();
-            statsBtnBdr = CreateCenterButton("Stats");
-            Grid.SetColumn(statsBtnBdr, 1);
-
+            //read selected friend
+            //save the select elem to tempSP
             tempSP = (StackPanel)friendsView.SelectedItem;
             if (tempSP == null)
             {    
                 remStatGrid.Children.Clear();
                 return;
             }
+            //set "selectSP" with tempSP's data
             tb.Text = (tempSP.Children[1] as TextBlock).Text;
             el.Fill = (tempSP.Children[0] as Ellipse).Fill;
+
+            //
+            currName = tb.Text;
+            ShowInputBlock.Clear();
+            int tempIndex = 0;
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if (friendsList[i].Name == currName)
+                    tempIndex = i;
+            }
+            ShowInputBlock.Text = friendsList[tempIndex].Message;
 
             sp.Children.Add(el);
             sp.Children.Add(tb);
             
             selFriendGrid.Children.Add(sp);
 
+            //add buttons
+            Border remBtnBdr = new Border();
+            remBtnBdr = CreateCenterButton("Remove");
+
+            Border statsBtnBdr = new Border();
+            statsBtnBdr = CreateCenterButton("Stats");
+            Grid.SetColumn(statsBtnBdr, 1);
+
+
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
         }
-        private Border CreateCenterButton(string text)
-        {
-            Border border = new Border();
-            border.BorderThickness = new Thickness(12);
-            Button btn = new Button();
-            btn.Content = text;
-            border.Child = btn;
-            if (text == "Stats")
-                btn.Click += ShowStats;
-            //else
-            
-
-
-            return border;
-        }
-        /// <summary>
-        /// Open setting popup
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Settings(object sender, RoutedEventArgs e)
-        {         
-            popUpSetting.IsOpen = !popUpSetting.IsOpen;
-        }
-        /// <summary>
+        /// <summary>                 
         /// Shows the stats
         /// </summary>
         /// <param name="sender"></param>
@@ -378,6 +430,7 @@ namespace Wpf
             btn.Click += ShowChat;
 
             ShowInputBlock.Visibility = Visibility.Collapsed;
+
 
             SeriesCollection = new SeriesCollection
             {
@@ -404,13 +457,27 @@ namespace Wpf
             btn.Click -= ShowChat;
             btn.Click += ShowStats;
             ShowInputBlock.Visibility = Visibility.Visible;
+
         }
         /// <summary>
-        /// Creates the two button remove and stats
+        /// Open setting popup
         /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Settings(object sender, RoutedEventArgs e)
+        {
+          
+            popUpSetting.IsOpen = !popUpSetting.IsOpen;
 
+            //plr.Load();
+            //plr.Play();
+
+        }
+        /// <summary>
+        /// Shows the stats
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         /// <summary>
         /// Open the user's information for editing
         /// </summary>
@@ -427,14 +494,14 @@ namespace Wpf
             Info.Background = new SolidColorBrush(Colors.White);
             IsInfoOn = true; ;
            
-            profBtn.Width = 100;
-            profBtn.Height = 70;
-            profBtn.VerticalAlignment = VerticalAlignment.Center;
-            profBtn.Content = "Change Image";
-            profBtn.Click += OpenFileDiaForImg;
+            profileBtn.Width = 100;
+            profileBtn.Height = 70;
+            profileBtn.VerticalAlignment = VerticalAlignment.Center;
+            profileBtn.Content = "Change Image";
+            profileBtn.Click += OpenFileDiaForImg;
             
             Info.Children.Add(sp);
-            Info.Children.Add(profBtn);
+            Info.Children.Add(profileBtn);
 
         }
         /// <summary>
@@ -453,20 +520,7 @@ namespace Wpf
                 temp.ImageSource = new BitmapImage(new Uri(fileDia.FileName));
                 profPic.Fill = temp;
             }
-        }
-
-        private void ChangeColor(object sender, RoutedEventArgs e)
-        {
-            if (sender.Equals(btnBlue))
-                bgColor.Color = colorBlue;
-            else
-                bgColor.Color = colorViolet;
-
-            btnBlue.IsEnabled = !btnBlue.IsEnabled;
-            btnVio.IsEnabled = !btnVio.IsEnabled;
-
-            center_Grid.Background = bgColor;
-        }
+        }        
         /// <summary>
         /// Unselect a friend by click somewhere else
         /// </summary>
@@ -479,6 +533,14 @@ namespace Wpf
                 friendsView.UnselectAll();
         }
 
-       
+        private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ppuSetting.IsOpen = true;
+        }
+
+        private void btnSetting_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ppuSetting.IsOpen = false;
+        }
     }
 }

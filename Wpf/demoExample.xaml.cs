@@ -92,5 +92,24 @@ namespace Wpf
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
         public Func<double, string> Formatter { get; set; }
+
+        private void listv_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            /*TextBox tb = new TextBox();
+            tb.KeyDown += EnterKey;
+            textGrid.Children.Add(tb);
+            */
+        }
+        private void EnterKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                if (inBox.Text == "")
+                    return;
+
+                tbView.Text += inBox.Text + "\n";
+                inBox.Text = String.Empty;
+            }
+        }
     }
 }
