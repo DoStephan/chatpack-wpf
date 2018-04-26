@@ -11,17 +11,23 @@ namespace Wpf
     class User : IComparable<User>
     {
         private string _name;
+        private string _tag;
         private BitmapImage _img;
-        private string _message = "";
+        private string _messageSent = "";
+        private string _messageReceive = "";
+        private DateTime _friendsSince;
+        private double _currMessageAmount;
 
-        public User(string name)
+        public User(string name, string tag)
         {
             _name = name;
+            _tag = tag;
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\default.png"));
         }
-        public User(string name, string img):this(name)
+        public User(string name, string tag, string img):this(name, tag)
         {
             _name = name;
+            _tag = tag;
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\" + img));
         }//C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture
 
@@ -51,17 +57,32 @@ namespace Wpf
             }
         }
 
-        public string Message
+        public string MessageSent
         {
             get
             {
-                return _message;
+                return _messageSent;
             }
             set
             {
-                _message += value;
+                _messageSent += value;
             }
         }
+        public string MessageReceive
+        {
+            get
+            {
+                return _messageReceive;
+            }
+            set
+            {
+                _messageReceive += value;
+            }
+        }
+
+        public double CurrMessageAmount
+        { get => _currMessageAmount; set => _currMessageAmount = value; }
+        public string Tag { get => _tag; set => _tag = value; }
         #endregion
 
         public int CompareTo(User other)
@@ -71,6 +92,33 @@ namespace Wpf
         public override string ToString()
         {
             return this.Name;
+        }
+        public int CountMessagesSent()
+        {
+            int count = 0;
+            for (int i = 0; i < MessageSent.Length; i++)
+            {
+                if (MessageSent[i] == '\n')
+                    count++;
+            }
+            return count;
+        }
+        public int CountMessagesReceive()
+        {
+            int count = 0;
+            for (int i = 0; i < MessageReceive.Length; i++)
+            {
+                if (MessageReceive[i] == '\n')
+                    count++;
+            }
+            return count;
+        }
+        public int GetTotalMessages()
+        {
+            int total;
+            total = CountMessagesReceive() + CountMessagesSent();
+
+            return total;
         }
     }
 }

@@ -168,11 +168,11 @@ namespace Wpf
                 string[] elem = row[i].Split(';');
 
                 User friend;
-                if (elem.Length == 1)
-                     friend = new User(elem[0]);
+                if (elem.Length == 2)
+                     friend = new User(elem[0],elem[1]);
 
                 else
-                    friend = new User(elem[0], elem[1]);
+                    friend = new User(elem[0], elem[1], elem[2]);
                 
                 friendsList.Add(friend);
             }
@@ -220,14 +220,14 @@ namespace Wpf
         {
             if (InputBox.Text == "")
                 return;
-
-
+            
             DateTime dateTime = DateTime.Now;
             for (int i = 0; i < friendsList.Count; i++)
             {
                 if(friendsList[i].Name == currName)
                 {
-                    friendsList[i].Message = dateTime.ToString("hh:mm    ")+InputBox.Text + "\n";
+                    friendsList[i].MessageSent = dateTime.ToString("hh:mm    ")+InputBox.Text + "\n";
+                    friendsList[i].CurrMessageAmount++;
                     break;
                 }
             }
@@ -307,7 +307,8 @@ namespace Wpf
             tb.Text = (tempSP.Children[1] as TextBlock).Text;
             el.Fill = (tempSP.Children[0] as Ellipse).Fill;
 
-            //
+            //EEEE
+            //change name to tag
             currName = tb.Text;
             ShowInputBlock.Clear();
             int tempIndex = 0;
@@ -316,7 +317,9 @@ namespace Wpf
                 if (friendsList[i].Name == currName)
                     tempIndex = i;
             }
-            ShowInputBlock.Text = friendsList[tempIndex].Message;
+            //EEEE
+            //Shows only sent message at the monment
+            ShowInputBlock.Text = friendsList[tempIndex].MessageSent;
 
             sp.Children.Add(el);
             sp.Children.Add(tb);
@@ -342,28 +345,45 @@ namespace Wpf
         /// <param name="e"></param>
         private void ShowStats(object sender, RoutedEventArgs e)
         {
+            //change button's clickevent and name 
             Button btn = sender as Button;
             btn.Content = "Chat";
 
             btn.Click -= ShowStats;
             btn.Click += ShowChat;
-
+            
             ShowInputBlock.Visibility = Visibility.Collapsed;
 
+            GenerateStatusInfo();
+
+            User u = GetCurrentFriend();
 
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
                 {
-                    Values = new ChartValues<double> { 10, 50, 39, 50, 35 }
+                    Values = new ChartValues<double> { u.CurrMessageAmount }//, 50, 39, 50, 35 }
                 }
             };
 
-            Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+            Labels = new[] { "Monday" };//, "Tuesday", "Wednesday", "Thursday", "Friday" };
             Formatter = value => value.ToString();
 
             DataContext = this;
         }
+
+        private User GetCurrentFriend()
+        {
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if (friendsList[i].Name == currName)
+                {
+                    return friendsList[i];
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// Shows the chat-history
         /// </summary>
@@ -376,6 +396,41 @@ namespace Wpf
             btn.Click -= ShowChat;
             btn.Click += ShowStats;
             ShowInputBlock.Visibility = Visibility.Visible;
+
+            right_Grid.Children.Clear();
+
+        }
+        /// <summary>
+        /// Create the information for the right corner 
+        /// </summary>
+        public void GenerateStatusInfo()
+        {
+            StackPanel s = new StackPanel();
+
+            TextBlock[] tb = new TextBlock[4];
+
+            for (int i = 0; i < tb.Length; i++)
+            {
+                tb[i] = new TextBlock();
+            }
+            for (int i = 0; i < friendsList.Count; i++)
+            {
+                if (friendsList[i].Name == currName)
+                {
+                    tb[0].Text = "Friends since: " + DateTime.Today;
+                    tb[1].Text = "Messages sent: " + friendsList[i].CountMessagesSent();
+                    tb[2].Text = "Messages received: " + friendsList[i].CountMessagesReceive();
+                    tb[3].Text = "Total Messages: " + friendsList[i].GetTotalMessages();
+
+                    break;
+                }
+                
+            }
+            for (int i = 0; i < tb.Length; i++)
+            {
+                s.Children.Add(tb[i]);
+            }
+            right_Grid.Children.Add(s);
         }
         /// <summary>
         /// Open setting popup
@@ -414,7 +469,7 @@ namespace Wpf
             else
             {
                 friendsView.Visibility = Visibility.Visible;
-                DeleteButtonInInfo();
+                DeleteButtonsInInfo();
                 isInfoOn = false;
             }
         }
@@ -453,22 +508,25 @@ namespace Wpf
         /// <summary>
         /// Delete the button, which pop up by editing the infos
         /// </summary>
-        public void DeleteButtonInInfo()
+        public void DeleteButtonsInInfo()
         {
             while (Info.Children.Count > 8)
             {
                 Info.Children.RemoveAt(8);
             }
         }
+        /// <summary>
+        /// Save the user's changes 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveInfo(object sender, RoutedEventArgs e)
         {
             tBoxName.Text = tBoxEditName.Text;
             tBoxEditName.IsReadOnly = true;
-            DeleteButtonInInfo();
+            DeleteButtonsInInfo();
         }
-
-
-
+        
         /// <summary>
         /// Open a filedialog for changing the image
         /// </summary>

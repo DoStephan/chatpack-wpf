@@ -135,8 +135,7 @@
                     <Label x:Name="lbTotalFriends" Grid.Row="3" Grid.Column="1"/>
                 </Grid>
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
-                          SelectionChanged="SelectFriend"
-                          Grid.Row="1">
+                          SelectionChanged="SelectFriend" Grid.Row="1">
                 </ListView>
             </Grid>
 
@@ -193,16 +192,16 @@
             <Grid x:Name="selFriendGrid" Grid.Column="0" Grid.Row="0"/>
 
 
-                <Grid x:Name="remStatGrid" Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid x:Name="remStatGrid" Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
             </Grid>
-            
+
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
-            
+
             <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
                 <Grid >
                     <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
@@ -215,7 +214,7 @@
                     </lvc:CartesianChart>
                 </Grid>
             </Border>
-            
+
             <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="14" >
                 <Grid x:Name="chat_Grid" >
                     <ScrollViewer x:Name="scrollView"  ScrollViewer.VerticalScrollBarVisibility="Auto" 
@@ -225,7 +224,7 @@
                     </ScrollViewer>
                 </Grid>
             </Border>
-    
+
             <Grid Grid.Column="2" Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -246,9 +245,6 @@
             </Border>
         </Grid>
 
-        <Grid x:Name="right_Grid" Grid.Column="2">
-        </Grid>
-
+        <Grid x:Name="right_Grid" Grid.Column="2"/>
     </Grid>
-
 </Window>
