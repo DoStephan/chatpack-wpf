@@ -16,7 +16,7 @@ namespace Wpf
         private string _messageSent = "";
         private string _messageReceive = "";
         private DateTime _friendsSince;
-        private double _currMessageAmount;
+        private double _currMessageAmount = 0;
 
         public User(string name, string tag)
         {
@@ -80,9 +80,34 @@ namespace Wpf
             }
         }
 
+       
+
+
+        public string Tag
+        {
+            get
+            {
+                return _tag;
+            }
+
+            set
+            {
+                _tag = value;
+            }
+        }
+
         public double CurrMessageAmount
-        { get => _currMessageAmount; set => _currMessageAmount = value; }
-        public string Tag { get => _tag; set => _tag = value; }
+        {
+            get
+            {
+                return _currMessageAmount;
+            }
+
+            set
+            {
+                _currMessageAmount = value;
+            }
+        }
         #endregion
 
         public int CompareTo(User other)
