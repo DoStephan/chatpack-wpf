@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System.Media;
+using System.Text;
 
 //using System.Data;
 
@@ -68,7 +69,9 @@ namespace Wpf
             InitColor(greyColors, grey);
 
             SetBackgroundColor(blueColors);
-           
+
+            sendCall_Grid.Visibility = Visibility.Hidden;
+
             #region User profile
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
@@ -132,7 +135,8 @@ namespace Wpf
             spList = new List<StackPanel>();
             TextBlock tbTag;
             TextBlock tbName;
-            StackPanel sp;
+            StackPanel mainSP;
+            StackPanel tempSP;
 
             for (int i = 0; i < friendsList.Count; i++)
             {
@@ -153,18 +157,24 @@ namespace Wpf
                 imgBrush.Stretch = Stretch.UniformToFill;
                 ellImg.Fill = imgBrush;
                 ellImg.Height = 56;
-                ellImg.Width = 56;
+                ellImg.Width = ellImg.Height;
                 ellImg.Margin = new Thickness(10);
                 
-                sp = new StackPanel();
-                sp.Orientation = Orientation.Horizontal;
-                
-                //add to Stackpanel
-                sp.Children.Add(ellImg);
-                sp.Children.Add(tbName);
-                sp.Children.Add(tbTag);
+                mainSP = new StackPanel();
+                mainSP.Orientation = Orientation.Horizontal;
 
-                spList.Add(sp);
+                //SP for name and tag
+                tempSP = new StackPanel();
+                tempSP.Orientation = Orientation.Vertical;
+                tempSP.VerticalAlignment = VerticalAlignment.Center;
+                tempSP.Children.Add(tbName);
+                tempSP.Children.Add(tbTag);
+
+                //add to Stackpanel
+                mainSP.Children.Add(ellImg);
+                mainSP.Children.Add(tempSP);
+
+                spList.Add(mainSP);
             }
         }      
         /// <summary>
@@ -174,7 +184,7 @@ namespace Wpf
         /// <param name="filepath"></param>    
         public void ReadFile(string filepath)
         {
-            string[] row = File.ReadAllLines(filepath);
+            string[] row = File.ReadAllLines(filepath, Encoding.UTF8);
             for (int i = 0; i < row.Length; i++)
             {
                 string[] elem = row[i].Split(';');
@@ -232,7 +242,11 @@ namespace Wpf
         {
             if (InputBox.Text == "")
                 return;
-            
+
+            //else if(InputBox.Text)
+            //  
+            //  
+
             DateTime dateTime = DateTime.Now;
             for (int i = 0; i < friendsList.Count; i++)
             {
@@ -293,32 +307,45 @@ namespace Wpf
         public void SelectFriend(object sender, SelectionChangedEventArgs e)
         {
             selFriendGrid.Children.Clear();
-            StackPanel tempSP;
-            StackPanel sp = new StackPanel();
-            sp.Orientation = Orientation.Horizontal;
+            StackPanel selectedItemSP;
+            StackPanel spNameTag = new StackPanel();
+            spNameTag.Orientation = Orientation.Vertical;
+            spNameTag.VerticalAlignment = VerticalAlignment.Center;
+            StackPanel mainSP = new StackPanel();
+            mainSP.Orientation = Orientation.Horizontal;
 
             //Create name and Tag
             TextBlock tbName = new TextBlock();
             tbName.FontSize = 16;
             tbName.VerticalAlignment = VerticalAlignment.Center;
-            
+
+            TextBlock tbTag = new TextBlock();
+            tbTag.FontSize = 14;
+            tbTag.VerticalAlignment = VerticalAlignment.Center;
+
             //Create picture
             Ellipse ellImg = new Ellipse();
             ellImg.Width = 56;
-            ellImg.Height = 56;
+            ellImg.Height = ellImg.Width;
             ellImg.Margin = new Thickness(10);
 
             //read selected friend
             //save the select elem to tempSP
-            tempSP = (StackPanel)friendsView.SelectedItem;
-            if (tempSP == null)
+            selectedItemSP = (StackPanel)friendsView.SelectedItem;
+            if (selectedItemSP == null)
             {    
                 remStatGrid.Children.Clear();
                 return;
             }
-            //set "selectSP" with tempSP's data
-            tbName.Text = (tempSP.Children[1] as TextBlock).Text;
-            ellImg.Fill = (tempSP.Children[0] as Ellipse).Fill;
+
+            //set "selectSP(friend)" with selectedItemSP's data
+            ellImg.Fill = (selectedItemSP.Children[0] as Ellipse).Fill;
+            StackPanel tempSP = new StackPanel();
+            tempSP = selectedItemSP.Children[1] as StackPanel;
+            tbName.Text = (tempSP.Children[0] as TextBlock).Text;
+            tbTag.Text = (tempSP.Children[1] as TextBlock).Text;
+            spNameTag.Children.Add(tbName);
+            spNameTag.Children.Add(tbTag);
 
             //EEEE
             //change name to tag
@@ -335,10 +362,10 @@ namespace Wpf
             //Shows only sent message at the monment
             ShowInputBlock.Text = friendsList[tempIndex].MessageSent;
 
-            sp.Children.Add(ellImg);
-            sp.Children.Add(tbName);
+            mainSP.Children.Add(ellImg);
+            mainSP.Children.Add(spNameTag);
             
-            selFriendGrid.Children.Add(sp);
+            selFriendGrid.Children.Add(mainSP);
 
             //add buttons
             Border remBtnBdr = new Border();
@@ -348,6 +375,7 @@ namespace Wpf
             statsBtnBdr = CreateCenterButton("Stats");
             Grid.SetColumn(statsBtnBdr, 1);
 
+            sendCall_Grid.Visibility = Visibility.Visible;
 
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
@@ -576,7 +604,6 @@ namespace Wpf
                 tempImgBrush.ImageSource = new BitmapImage(new Uri(fileDia.FileName));
 
                 profPic.Fill = tempImgBrush;
-
             }
         }        
         /// <summary>

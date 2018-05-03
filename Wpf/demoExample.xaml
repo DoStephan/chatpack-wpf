@@ -74,8 +74,7 @@
             </TextBox>
         </Grid>
         
-        
-        <ListView x:Name="listv" Grid.Row="1">
+        <ListView x:Name="listv" Grid.Row="1" SelectionChanged="listv_SelectionChanged">
             <ListView.Items>
                 <TextBlock Text="1"/>
                 <TextBlock Text="2"/>

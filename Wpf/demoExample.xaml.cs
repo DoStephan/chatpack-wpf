@@ -95,11 +95,28 @@ namespace Wpf
 
         private void listv_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*TextBox tb = new TextBox();
-            tb.KeyDown += EnterKey;
-            textGrid.Children.Add(tb);
-            */
+            Button btn1 = new Button();
+            btn1.Content = "C";
+            btn1.Width = 20;
+            btn1.Height = btn1.Width;
+            Grid.SetColumn(btn1,2);
+            Grid.SetRow(btn1, 3);
+
+            G.Children.Add(btn1);
+
+            btn1.Click += OpenText;
         }
+
+        private void OpenText(object sender, RoutedEventArgs e)
+        {
+            TextBlock tb = new TextBlock();
+            tb.Text = "sad";
+            Grid.SetColumn(tb, 1);
+            Grid.SetRow(tb, 3);
+
+            
+        }
+
         private void EnterKey(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
