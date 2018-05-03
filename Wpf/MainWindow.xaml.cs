@@ -34,10 +34,12 @@ namespace Wpf
         string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
         string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
 
-        private Button profileBtn = new Button();
+        private Button changeImgBtn = new Button();
         private Button saveBtn = new Button();
-        private Button cancalBtn = new Button();
-        private String currName;
+        private Button cancelBtn = new Button();
+        private string currName;
+        private ImageBrush currImageBrush = new ImageBrush();
+
         #endregion
         #region Propeties
         public bool IsInfoOn
@@ -86,6 +88,8 @@ namespace Wpf
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
+            currImageBrush = (ImageBrush)profPic.Fill;
+
         }
 
         private void InitColor(SolidColorBrush[] br, string[] colors)
@@ -126,17 +130,22 @@ namespace Wpf
         private void CreateSPItem()
         {
             spList = new List<StackPanel>();
-            TextBlock tb;
+            TextBlock tbTag;
+            TextBlock tbName;
             StackPanel sp;
 
             for (int i = 0; i < friendsList.Count; i++)
             {
                 //name
-                tb = new TextBlock();
-                tb.FontSize = 16;
-                tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.Text = friendsList[i].Name;
-
+                tbName = new TextBlock();
+                tbName.FontSize = 16;
+                tbName.VerticalAlignment = VerticalAlignment.Center;
+                tbName.Text = friendsList[i].Name;
+                //tag
+                tbTag = new TextBlock();
+                tbTag.FontSize = 14;
+                tbTag.VerticalAlignment = VerticalAlignment.Center;
+                tbTag.Text = friendsList[i].Tag;
                 //picture
                 Ellipse ellImg = new Ellipse();
                 ImageBrush imgBrush = new ImageBrush();
@@ -146,18 +155,21 @@ namespace Wpf
                 ellImg.Height = 56;
                 ellImg.Width = 56;
                 ellImg.Margin = new Thickness(10);
-
-                //add to Stackpanel
+                
                 sp = new StackPanel();
                 sp.Orientation = Orientation.Horizontal;
+                
+                //add to Stackpanel
                 sp.Children.Add(ellImg);
-                sp.Children.Add(tb);
+                sp.Children.Add(tbName);
+                sp.Children.Add(tbTag);
 
                 spList.Add(sp);
             }
         }      
         /// <summary>
         /// Reads the files and sets the list
+        /// File needs to be in debug
         /// </summary>
         /// <param name="filepath"></param>    
         public void ReadFile(string filepath)
@@ -285,16 +297,17 @@ namespace Wpf
             StackPanel sp = new StackPanel();
             sp.Orientation = Orientation.Horizontal;
 
-            //Create name
-            TextBlock tb = new TextBlock();
-            tb.FontSize = 16;
-            tb.VerticalAlignment = VerticalAlignment.Center;
-
+            //Create name and Tag
+            TextBlock tbName = new TextBlock();
+            tbName.FontSize = 16;
+            tbName.VerticalAlignment = VerticalAlignment.Center;
+            
             //Create picture
-            Ellipse el = new Ellipse();
-            el.Width = 56;
-            el.Height = 56;
-            el.Margin = new Thickness(10);
+            Ellipse ellImg = new Ellipse();
+            ellImg.Width = 56;
+            ellImg.Height = 56;
+            ellImg.Margin = new Thickness(10);
+
             //read selected friend
             //save the select elem to tempSP
             tempSP = (StackPanel)friendsView.SelectedItem;
@@ -304,12 +317,13 @@ namespace Wpf
                 return;
             }
             //set "selectSP" with tempSP's data
-            tb.Text = (tempSP.Children[1] as TextBlock).Text;
-            el.Fill = (tempSP.Children[0] as Ellipse).Fill;
+            tbName.Text = (tempSP.Children[1] as TextBlock).Text;
+            ellImg.Fill = (tempSP.Children[0] as Ellipse).Fill;
 
             //EEEE
             //change name to tag
-            currName = tb.Text;
+            currName = tbName.Text;
+
             ShowInputBlock.Clear();
             int tempIndex = 0;
             for (int i = 0; i < friendsList.Count; i++)
@@ -321,8 +335,8 @@ namespace Wpf
             //Shows only sent message at the monment
             ShowInputBlock.Text = friendsList[tempIndex].MessageSent;
 
-            sp.Children.Add(el);
-            sp.Children.Add(tb);
+            sp.Children.Add(ellImg);
+            sp.Children.Add(tbName);
             
             selFriendGrid.Children.Add(sp);
 
@@ -488,23 +502,29 @@ namespace Wpf
             popUpSetting.IsOpen = !popUpSetting.IsOpen;
             tBoxEditName.IsReadOnly = false;
 
-            profileBtn.Width = 100;
-            profileBtn.Height = 35;
-            profileBtn.VerticalAlignment = VerticalAlignment.Center;
-            profileBtn.Content = "Change Image";
-            profileBtn.Click += OpenFileDiaForImg;
-            Grid.SetRow(profileBtn, 4);
-            Grid.SetColumnSpan(profileBtn, 2);
+            changeImgBtn.Width = 100;
+            changeImgBtn.Height = 35;
+            changeImgBtn.VerticalAlignment = VerticalAlignment.Center;
+            changeImgBtn.Content = "Change Image";
+            changeImgBtn.Click += OpenFileDiaForImg;
+            Grid.SetRow(changeImgBtn, 4);
+            Grid.SetColumnSpan(changeImgBtn, 2);
 
             saveBtn.Content = "save";
             saveBtn.Click += SaveInfo;
             Grid.SetRow(saveBtn,5);
-            
 
-            
-            Info.Children.Add(profileBtn);
+            cancelBtn.Content = "cancel";
+            cancelBtn.Click += CancelInfoChanges;
+            Grid.SetRow(cancelBtn,5);
+            Grid.SetColumn(cancelBtn, 1);
+
+
+            Info.Children.Add(changeImgBtn);
             Info.Children.Add(saveBtn);
+            Info.Children.Add(cancelBtn);
         }
+        
         /// <summary>
         /// Delete the button, which pop up by editing the infos
         /// </summary>
@@ -524,9 +544,22 @@ namespace Wpf
         {
             tBoxName.Text = tBoxEditName.Text;
             tBoxEditName.IsReadOnly = true;
+            currImageBrush = (ImageBrush)profPic.Fill;
             DeleteButtonsInInfo();
         }
-        
+        /// <summary>
+        /// Cancel the information's changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CancelInfoChanges(object sender, RoutedEventArgs e)
+        {
+            profPic.Fill = currImageBrush;
+            tBoxEditName.Text = tBoxName.Text;
+            tBoxEditName.IsReadOnly = true;
+            DeleteButtonsInInfo();
+        }
+
         /// <summary>
         /// Open a filedialog for changing the image
         /// </summary>
@@ -539,9 +572,11 @@ namespace Wpf
             fileDia.Filter = "Images (*.png, *.jpg)|*.png; *jpg";
             if (fileDia.ShowDialog() == true)
             {
-                ImageBrush temp = new ImageBrush();
-                temp.ImageSource = new BitmapImage(new Uri(fileDia.FileName));
-                profPic.Fill = temp;
+                ImageBrush tempImgBrush = new ImageBrush();
+                tempImgBrush.ImageSource = new BitmapImage(new Uri(fileDia.FileName));
+
+                profPic.Fill = tempImgBrush;
+
             }
         }        
         /// <summary>
