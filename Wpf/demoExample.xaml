@@ -43,7 +43,6 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
         
         <Border BorderThickness="10">
             <Button x:Name="btn"  Width="50" Height="50"  Content="A" Style="{StaticResource roundBtn}"/>
@@ -81,5 +80,8 @@
             </ListView.Items>
         </ListView>
 
+        <TextBlock x:Name="actWind" Grid.Row="3">
+            
+        </TextBlock>
     </Grid>
 </Window>

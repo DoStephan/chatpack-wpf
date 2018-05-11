@@ -15,6 +15,8 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using Microsoft.Win32;
 using System.Windows.Media.Animation;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Wpf
 {
@@ -36,8 +38,45 @@ namespace Wpf
             //also adding values updates and animates the chart automatically
             //SeriesCollection[1].Values.Add(48d);
 
-            btn.Click += moveTb;
+
+            //Thread i = new Thread();
+
+                string text = GetActiveWindowTitle();
+                actWind.Text = text;
+            
+            
+
+            btn.Click += ClickEvent;
+            //btn.Click += moveTb;
         }
+
+        private void ClickEvent(object sender, RoutedEventArgs e)
+        {
+            string text = GetActiveWindowTitle();
+            actWind.Text = text;
+        }
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        private string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            //EEEE
+            //abstract klasse
+            return null;
+        }
+
 
         private void moveTb(object sender, RoutedEventArgs e)
         {
