@@ -38,8 +38,11 @@ namespace Wpf
         private Button changeImgBtn = new Button();
         private Button saveBtn = new Button();
         private Button cancelBtn = new Button();
-        private string currName;
+        private string currTag;
         private ImageBrush currImageBrush = new ImageBrush();
+
+        private int[] statusAmount = new int[] { 1, 5, 10 };
+
 
         #endregion
         #region Propeties
@@ -62,7 +65,7 @@ namespace Wpf
         public MainWindow()
         {
             InitializeComponent();
-            
+
             this.FontSize = 16;
 
             InitColor(blueColors, blueHex);
@@ -74,7 +77,7 @@ namespace Wpf
 
             #region User profile
             ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg",UriKind.Relative));
+            myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg", UriKind.Relative));
             myBrush.Stretch = Stretch.UniformToFill;        //@"C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture\smittyWerbenJaggerManJensen.jpg"
             profPic.Fill = myBrush;
             profPic.Height = 60;
@@ -87,7 +90,7 @@ namespace Wpf
             ReadFile("friends.txt");
             CreateSPItem();
             friendsView.ItemsSource = spList;
-            
+
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
@@ -96,7 +99,7 @@ namespace Wpf
         }
 
         private void InitColor(SolidColorBrush[] br, string[] colors)
-        {            
+        {
             Color c;
             SolidColorBrush scb;
             for (int i = 0; i < br.Length; i++)
@@ -121,7 +124,7 @@ namespace Wpf
                 SetBackgroundColor(blueColors);
             else
                 SetBackgroundColor(greyColors);
-        
+
             btnBlue.IsEnabled = !btnBlue.IsEnabled;
             btnVio.IsEnabled = !btnVio.IsEnabled;
         }
@@ -137,6 +140,7 @@ namespace Wpf
             TextBlock tbName;
             StackPanel mainSP;
             StackPanel tempSP;
+
 
             for (int i = 0; i < friendsList.Count; i++)
             {
@@ -159,7 +163,7 @@ namespace Wpf
                 ellImg.Height = 56;
                 ellImg.Width = ellImg.Height;
                 ellImg.Margin = new Thickness(10);
-                
+
                 mainSP = new StackPanel();
                 mainSP.Orientation = Orientation.Horizontal;
 
@@ -176,7 +180,7 @@ namespace Wpf
 
                 spList.Add(mainSP);
             }
-        }      
+        }
         /// <summary>
         /// Reads the files and sets the list
         /// File needs to be in debug
@@ -191,11 +195,11 @@ namespace Wpf
 
                 User friend;
                 if (elem.Length == 2)
-                     friend = new User(elem[0],elem[1]);
+                    friend = new User(elem[0], elem[1]);
 
                 else
                     friend = new User(elem[0], elem[1], elem[2]);
-                
+
                 friendsList.Add(friend);
             }
             friendsList.Sort();
@@ -218,7 +222,7 @@ namespace Wpf
                 (sender as Button).Width = 60;
             }
             popUpTag.IsOpen = !popUpTag.IsOpen;
-        }         
+        }
         /// <summary>
         /// Send the message via "enter"
         /// </summary>
@@ -242,25 +246,18 @@ namespace Wpf
         {
             if (InputBox.Text == "")
                 return;
-
-            //else if(InputBox.Text)
-            //  
-            //  
-
+            
             DateTime dateTime = DateTime.Now;
-            for (int i = 0; i < friendsList.Count; i++)
-            {
-                if(friendsList[i].Name == currName)
-                {
-                    friendsList[i].MessageSent = dateTime.ToString("hh:mm    ")+InputBox.Text + "\n";
-                    friendsList[i].CurrMessageAmount++;
-                    break;
-                }
-            }
+            User friend = GetCurrentFriend();
+
+            friend.MessageSent = tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
+            friend.CurrMessageAmount++;
+
             //ShowInputBlock.Text += friendsList[i].Message;
-            ShowInputBlock.Text += dateTime.ToString("hh:mm    ")+InputBox.Text +"\n";
+            ShowInputBlock.Text += tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();
+
         }
         /// <summary>
         /// Creates the two button remove and stats
@@ -280,7 +277,8 @@ namespace Wpf
                 btn.Click += Removefriend;
 
             return border;
-    }
+        }
+
         /// <summary>
         /// Removes friend
         /// </summary>
@@ -288,15 +286,11 @@ namespace Wpf
         /// <param name="e"></param>
         private void Removefriend(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < friendsList.Count; i++)
-            {
-                if (friendsList[i].Name == currName)
-                {
-                    friendsList.Remove(friendsList[i]);
-                    break;
-                }
-            }
-            CreateSPItem();            
+            User friend = GetCurrentFriend();
+            
+            friendsList.Remove(friend);
+
+            CreateSPItem();
             friendsView.ItemsSource = spList;
         }
         /// <summary>
@@ -347,15 +341,13 @@ namespace Wpf
             spNameTag.Children.Add(tbName);
             spNameTag.Children.Add(tbTag);
 
-            //EEEE
-            //change name to tag
-            currName = tbName.Text;
-
+            currTag = tbTag.Text;
             ShowInputBlock.Clear();
             int tempIndex = 0;
+
             for (int i = 0; i < friendsList.Count; i++)
             {
-                if (friendsList[i].Name == currName)
+                if (friendsList[i].Tag == currTag)
                     tempIndex = i;
             }
             //EEEE
@@ -400,6 +392,9 @@ namespace Wpf
 
             User u = GetCurrentFriend();
 
+            //messageChart.Update(true);
+            
+
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
@@ -411,14 +406,16 @@ namespace Wpf
             Labels = new[] { "Monday" };//, "Tuesday", "Wednesday", "Thursday", "Friday" };
             Formatter = value => value.ToString();
 
+            //DataContext = this;
             DataContext = this;
+            
         }
 
         private User GetCurrentFriend()
         {
             for (int i = 0; i < friendsList.Count; i++)
             {
-                if (friendsList[i].Name == currName)
+                if (friendsList[i].Tag == currTag)
                 {
                     return friendsList[i];
                 }
@@ -449,31 +446,45 @@ namespace Wpf
         {
             StackPanel s = new StackPanel();
 
-            TextBlock[] tb = new TextBlock[4];
+            TextBlock[] tb = new TextBlock[5];
 
             for (int i = 0; i < tb.Length; i++)
             {
                 tb[i] = new TextBlock();
             }
-            for (int i = 0; i < friendsList.Count; i++)
-            {
-                if (friendsList[i].Name == currName)
-                {
-                    tb[0].Text = "Friends since: " + DateTime.Today;
-                    tb[1].Text = "Messages sent: " + friendsList[i].CountMessagesSent();
-                    tb[2].Text = "Messages received: " + friendsList[i].CountMessagesReceive();
-                    tb[3].Text = "Total Messages: " + friendsList[i].GetTotalMessages();
-
-                    break;
-                }
-                
-            }
+            User friend = GetCurrentFriend();
+            
+            tb[0].Text = "Friends since: " + DateTime.Today;
+            tb[1].Text = "Messages sent: " + friend.CountMessagesSent();
+            tb[2].Text = "Messages received: " + friend.CountMessagesReceive();
+            tb[3].Text = "Total Messages: " + friend.GetTotalMessages();
+            tb[4].Text = CreateStatus(friend);
+            
             for (int i = 0; i < tb.Length; i++)
             {
                 s.Children.Add(tb[i]);
             }
+            s.Margin = new Thickness(8);
             right_Grid.Children.Add(s);
         }
+
+        private string CreateStatus(User friend)
+        {
+            string status = "";
+
+            if (friend.GetTotalMessages() < statusAmount[0])
+                status = "Bekannter";
+            else if (friend.GetTotalMessages() > statusAmount[1])
+                status = "Buddy";
+
+            //else if (friend.GetTotalMessages() > statusAmount[2] && friend.GetTotalMessages() < statusAmount[1])
+            //    status = "ABF";
+            else
+                status = "Freunde";
+
+            return status;
+        }
+
         /// <summary>
         /// Open setting popup
         /// </summary>
@@ -633,3 +644,4 @@ namespace Wpf
         }
     }
 }
+        

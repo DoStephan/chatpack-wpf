@@ -39,44 +39,43 @@ namespace Wpf
             //SeriesCollection[1].Values.Add(48d);
 
 
-            //Thread i = new Thread();
-
-                string text = GetActiveWindowTitle();
-                actWind.Text = text;
-            
-            
-
-            btn.Click += ClickEvent;
-            //btn.Click += moveTb;
+            Thread i = new Thread(GetActiveWindowTitle);
+            i.Start();
         }
-
-        private void ClickEvent(object sender, RoutedEventArgs e)
-        {
-            string text = GetActiveWindowTitle();
-            actWind.Text = text;
-        }
+        //private void ClickEvent(object sender, RoutedEventArgs e)
+        //{
+        //    string text = GetActiveWindowTitle();
+        //    actWind.Text = text;
+        //}
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
-
         [DllImport("user32.dll")]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        private string GetActiveWindowTitle()
+        private void GetActiveWindowTitle()
         {
+
+            ChangeWin dele = new ChangeWin(ChangeText);
             const int nChars = 256;
             StringBuilder Buff = new StringBuilder(nChars);
             IntPtr handle = GetForegroundWindow();
-
-            if (GetWindowText(handle, Buff, nChars) > 0)
+            while (true)
             {
-                return Buff.ToString();
-            }
-            //EEEE
-            //abstract klasse
-            return null;
-        }
+                Thread.Sleep(700);
+                if (GetWindowText(handle, Buff, nChars) > 0)
+                {
 
+                    actWind.Dispatcher.BeginInvoke(dele, Buff.ToString());
+                    //Buff.ToString();//return Buff.ToString();
+                }
+            }
+        }
+        private void ChangeText(string text)
+        {
+            actWind.Text = text;
+        }
+        private delegate void ChangeWin(string text);
 
         private void moveTb(object sender, RoutedEventArgs e)
         {

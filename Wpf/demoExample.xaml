@@ -49,10 +49,15 @@
         </Border>
 
         <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="1">
-            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Visible">
+            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Visible" >
                 
             </TextBlock>
         </Grid>
+        <StackPanel Grid.Column="2" Background="AliceBlue" Margin="5">
+            <Button Content="2"/>
+            <Button Content="2"/>
+            <Button Content="2"/>
+        </StackPanel>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
