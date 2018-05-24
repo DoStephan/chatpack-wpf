@@ -146,7 +146,7 @@
             </Popup>
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
             <Popup x:Name="popUpSetting" PlacementTarget="{Binding ElementName= btnSetting}"
-                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True">
+                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True" MouseLeave="btnSetting_MouseLeave">
                 <TextBlock Height="200" Width="210" Background="Transparent" >
                     <StackPanel Orientation="Vertical"  Margin="10">
                         
@@ -199,7 +199,7 @@
                 </Grid.ColumnDefinitions>
             </Grid>
 
-            <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0" Visibility="Hidden"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
 
             <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14" >
@@ -216,17 +216,17 @@
             </Border>
 
             <Border Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="14" >
-                <Grid x:Name="chat_Grid" >
-                    <ScrollViewer x:Name="scrollView"  ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                <Grid x:Name="chat_Grid" Visibility="Hidden">
+                    <ScrollViewer x:Name="scrollView"  ScrollViewer.VerticalScrollBarVisibility="Auto"
                       Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
-                        <TextBox x:Name="ShowInputBlock" FontSize="22"  Background="White" IsReadOnly="True"/>
+                        <TextBox x:Name="ShowInputBlock" FontSize="22" Background="White" IsReadOnly="True"/>
                     </ScrollViewer>
                 </Grid>
             </Border>
 
-            
-            <Grid x:Name="sendCall_Grid" Grid.Column="2" Grid.Row="3">
+
+            <Grid x:Name="sendCall_Grid" Grid.Column="2" Grid.Row="3" Visibility="Hidden">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -241,7 +241,7 @@
 
             <Border  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="14">
                 <TextBox x:Name="InputBox" TextAlignment="Left" VerticalContentAlignment="Center"
-                    FontSize="22" KeyDown="OnKeyEnterHandler">
+                    FontSize="22" KeyDown="OnKeyEnterHandler" Visibility="Hidden">
                 </TextBox>
             </Border>
         </Grid>

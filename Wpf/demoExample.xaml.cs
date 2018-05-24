@@ -37,11 +37,35 @@ namespace Wpf
 
             //also adding values updates and animates the chart automatically
             //SeriesCollection[1].Values.Add(48d);
+            btn1.Click += ShowHideBox;
+            btn2.Click += ShowHideBox;
+            btn3.Click += ShowPopUp;
 
+            ppu2.IsOpen = true;
 
             Thread i = new Thread(GetActiveWindowTitle);
+            i.IsBackground = true;
+            
             i.Start();
         }
+
+        private void ShowPopUp(object sender, RoutedEventArgs e)
+        {
+
+            ppu.IsOpen = true;
+        }
+
+        private void ShowHideBox(object sender, RoutedEventArgs e)
+        {
+            Button bt = sender as Button;
+            if (bt.Name == "btn1")
+                tb.Visibility = Visibility.Visible;
+            else
+                tb.Visibility = Visibility.Hidden;
+        }
+
+        private delegate void ChangeWin(string text);
+
         //private void ClickEvent(object sender, RoutedEventArgs e)
         //{
         //    string text = GetActiveWindowTitle();
@@ -56,26 +80,27 @@ namespace Wpf
         private void GetActiveWindowTitle()
         {
 
-            ChangeWin dele = new ChangeWin(ChangeText);
             const int nChars = 256;
             StringBuilder Buff = new StringBuilder(nChars);
-            IntPtr handle = GetForegroundWindow();
             while (true)
             {
-                Thread.Sleep(700);
+                IntPtr handle = GetForegroundWindow();
                 if (GetWindowText(handle, Buff, nChars) > 0)
                 {
-
+                    ChangeWin dele = new ChangeWin(ChangeText);
+                    Thread.Sleep(700);
+                    //dele.BeginInvoke(Buff.ToString(), null, null);
                     actWind.Dispatcher.BeginInvoke(dele, Buff.ToString());
                     //Buff.ToString();//return Buff.ToString();
+
+
                 }
             }
         }
-        private void ChangeText(string text)
-        {
-            actWind.Text = text;
-        }
-        private delegate void ChangeWin(string text);
+            private void ChangeText(string text)
+            {
+                actWind.Text = text;
+            }
 
         private void moveTb(object sender, RoutedEventArgs e)
         {
@@ -165,6 +190,11 @@ namespace Wpf
                 tbView.Text += inBox.Text + "\n";
                 inBox.Text = String.Empty;
             }
+        }
+
+        private void ppu2_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ppu2.IsOpen = false;
         }
     }
 }

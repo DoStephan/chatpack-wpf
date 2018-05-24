@@ -15,6 +15,8 @@ namespace Wpf
         private BitmapImage _img;
         private string _messageSent = "";
         private string _messageReceive = "";
+        private int _amountSent = 0;
+        private int _amountReceive = 0;
         private DateTime _friendsSince;
         private double _currMessageAmount = 0;
 
@@ -24,7 +26,7 @@ namespace Wpf
             _tag = tag;
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\default.png"));
         }
-        public User(string name, string tag, string img):this(name, tag)
+            public User(string name, string tag, string img):this(name, tag)
         {
             _name = name;
             _tag = tag;
@@ -43,7 +45,6 @@ namespace Wpf
                 _name = value;
             }
         }
-
         public BitmapImage Img
         {
             get
@@ -56,7 +57,6 @@ namespace Wpf
                 _img = value;
             }
         }
-
         public string MessageSent
         {
             get
@@ -79,10 +79,6 @@ namespace Wpf
                 _messageReceive += value;
             }
         }
-
-       
-
-
         public string Tag
         {
             get
@@ -95,7 +91,6 @@ namespace Wpf
                 _tag = value;
             }
         }
-
         public double CurrMessageAmount
         {
             get
@@ -108,6 +103,28 @@ namespace Wpf
                 _currMessageAmount = value;
             }
         }
+        public int AmountSent
+        {
+            get
+            {
+                return _amountSent;
+            }
+            set
+            {
+                _amountSent = value;
+            }
+        }
+        public int AmountReceive
+        {
+            get
+            {
+                return _amountReceive;
+            }
+            set
+            {
+                _amountReceive = value;
+            }
+        }
         #endregion
 
         public int CompareTo(User other)
@@ -118,30 +135,11 @@ namespace Wpf
         {
             return this.Name;
         }
-        public int CountMessagesSent()
-        {
-            int count = 0;
-            for (int i = 0; i < MessageSent.Length; i++)
-            {
-                if (MessageSent[i] == '\n')
-                    count++;
-            }
-            return count;
-        }
-        public int CountMessagesReceive()
-        {
-            int count = 0;
-            for (int i = 0; i < MessageReceive.Length; i++)
-            {
-                if (MessageReceive[i] == '\n')
-                    count++;
-            }
-            return count;
-        }
+        
         public int GetTotalMessages()
         {
             int total;
-            total = CountMessagesReceive() + CountMessagesSent();
+            total = AmountReceive + AmountSent;
 
             return total;
         }

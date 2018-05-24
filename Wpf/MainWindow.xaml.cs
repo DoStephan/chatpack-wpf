@@ -251,8 +251,8 @@ namespace Wpf
             User friend = GetCurrentFriend();
 
             friend.MessageSent = tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
-            friend.CurrMessageAmount++;
-
+            //friend.CurrMessageAmount++;
+            friend.AmountSent++;
             //ShowInputBlock.Text += friendsList[i].Message;
             ShowInputBlock.Text += tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
             InputBox.Text = String.Empty;
@@ -290,6 +290,10 @@ namespace Wpf
             
             friendsList.Remove(friend);
 
+            sendCall_Grid.Visibility = Visibility.Hidden;
+            //InputBox.Visibility = Visibility.Hidden;
+            //chat_Grid.Visibility = Visibility.Hidden;
+
             CreateSPItem();
             friendsView.ItemsSource = spList;
         }
@@ -307,6 +311,10 @@ namespace Wpf
             spNameTag.VerticalAlignment = VerticalAlignment.Center;
             StackPanel mainSP = new StackPanel();
             mainSP.Orientation = Orientation.Horizontal;
+
+            sendCall_Grid.Visibility = Visibility.Visible;
+            InputBox.Visibility = Visibility.Visible;
+            chat_Grid.Visibility = Visibility.Visible;
 
             //Create name and Tag
             TextBlock tbName = new TextBlock();
@@ -455,8 +463,8 @@ namespace Wpf
             User friend = GetCurrentFriend();
             
             tb[0].Text = "Friends since: " + DateTime.Today;
-            tb[1].Text = "Messages sent: " + friend.CountMessagesSent();
-            tb[2].Text = "Messages received: " + friend.CountMessagesReceive();
+            tb[1].Text = "Messages sent: " + friend.AmountSent;
+            tb[2].Text = "Messages received: " + friend.AmountReceive;
             tb[3].Text = "Total Messages: " + friend.GetTotalMessages();
             tb[4].Text = CreateStatus(friend);
             
