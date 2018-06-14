@@ -37,16 +37,46 @@ namespace Wpf
 
             //also adding values updates and animates the chart automatically
             //SeriesCollection[1].Values.Add(48d);
-            btn1.Click += ShowHideBox;
-            btn2.Click += ShowHideBox;
             btn3.Click += ShowPopUp;
+            btnmation.Click += AnimationBorder;
 
-            ppu2.IsOpen = true;
+
 
             Thread i = new Thread(GetActiveWindowTitle);
             i.IsBackground = true;
-            
+
             i.Start();
+        }
+
+        private void AnimationBorder(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            DoubleAnimation db = new DoubleAnimation();
+            db.To = 150;
+            db.Duration = TimeSpan.FromSeconds(0.5);
+            db.AutoReverse = false;
+            db.RepeatBehavior = new RepeatBehavior(1);
+            bordermation.BeginAnimation(StackPanel.WidthProperty, db);
+
+            btn.Click -= AnimationBorder;
+            btn.Click += Reanimate;
+
+        }
+
+        private void Reanimate(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            DoubleAnimation db = new DoubleAnimation();
+            db.To = 0;
+            db.Duration = TimeSpan.FromSeconds(0.5);
+            db.AutoReverse = false;
+            db.RepeatBehavior = new RepeatBehavior(1);
+            bordermation.BeginAnimation(StackPanel.WidthProperty, db);
+            btn.Click -= Reanimate;
+            btn.Click += AnimationBorder;
+
         }
 
         private void ShowPopUp(object sender, RoutedEventArgs e)
@@ -55,15 +85,7 @@ namespace Wpf
             ppu.IsOpen = true;
         }
 
-        private void ShowHideBox(object sender, RoutedEventArgs e)
-        {
-            Button bt = sender as Button;
-            if (bt.Name == "btn1")
-                tb.Visibility = Visibility.Visible;
-            else
-                tb.Visibility = Visibility.Hidden;
-        }
-
+    
         private delegate void ChangeWin(string text);
 
         //private void ClickEvent(object sender, RoutedEventArgs e)
@@ -102,14 +124,7 @@ namespace Wpf
                 actWind.Text = text;
             }
 
-        private void moveTb(object sender, RoutedEventArgs e)
-        {
-            if (tb.Visibility == Visibility.Visible)
-                tb.Visibility = Visibility.Collapsed;
-            else
-                tb.Visibility = Visibility.Visible;
-
-        }
+    
         private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
         {
             Border sp = sender as Border;
@@ -133,6 +148,9 @@ namespace Wpf
             db.RepeatBehavior = new RepeatBehavior(1);
             sp.BeginAnimation(StackPanel.HeightProperty, db);
         }
+
+
+
 
         //private void ShowStats(object sender, RoutedEventArgs e)
         //{
@@ -162,8 +180,8 @@ namespace Wpf
             btn1.Content = "C";
             btn1.Width = 20;
             btn1.Height = btn1.Width;
-            Grid.SetColumn(btn1,2);
-            Grid.SetRow(btn1, 3);
+            Grid.SetColumn(btn1,1);
+            Grid.SetRow(btn1, 1);
 
             G.Children.Add(btn1);
 
@@ -194,7 +212,8 @@ namespace Wpf
 
         private void ppu2_MouseLeave(object sender, MouseEventArgs e)
         {
-            ppu2.IsOpen = false;
+
+            ppu.IsOpen = false;
         }
     }
 }

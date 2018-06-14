@@ -48,27 +48,20 @@
             <Button x:Name="btn"  Width="50" Height="50"  Content="A" Style="{StaticResource roundBtn}"/>
         </Border>
 
-        <Grid x:Name="grid" Grid.Row="2" Grid.ColumnSpan="2">
-            <TextBlock x:Name="tb" Background="Yellow" Text="test" Visibility="Hidden" >
-                
-            </TextBlock>
-        </Grid>
+        <Button></Button>
+        
         <StackPanel Grid.Column="2" Background="AliceBlue" Margin="5">
             <Button x:Name="btn1" Content="1"/>
             <Button x:Name="btn2" Content="2"/>
             <Button x:Name="btn3" Content="3"/>
         </StackPanel>
-        <Popup x:Name="ppu" PlacementTarget="{Binding ElementName= btn3}">
+        <Popup x:Name="ppu" PlacementTarget="{Binding ElementName= btn3}" MouseLeave="ppu2_MouseLeave">
             <TextBlock Background="White">
                 <TextBlock Text ="Test1" Background="Transparent"/>
                 <TextBlock Text ="Test2" Background="White"/>
                 
             </TextBlock>
             
-        </Popup>
-        <Popup x:Name="ppu2" Placement="Center" MouseLeave="ppu2_MouseLeave">
-            <TextBlock Text ="Test" Background="White"/>
-
         </Popup>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -89,13 +82,9 @@
                 
             </TextBox>
         </Grid>
-        
-        <ListView x:Name="listv" Grid.Row="1" SelectionChanged="listv_SelectionChanged">
-            <ListView.Items>
-                <TextBlock Text="1"/>
-                <TextBlock Text="2"/>
-            </ListView.Items>
-        </ListView>
+        <Button x:Name="btnmation" Grid.Row="1" Height="20" Content="animation"></Button>
+        <TextBlock x:Name="bordermation" Grid.Row="2" Width="0" Background="AliceBlue" 
+                   Text="Text" HorizontalAlignment="Left"/>
 
         <TextBlock x:Name="actWind" Grid.Row="3" Grid.ColumnSpan="2">
             

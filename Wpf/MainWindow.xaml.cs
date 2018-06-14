@@ -12,6 +12,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Media;
 using System.Text;
+using System.Windows.Media.Animation;
 
 //using System.Data;
 
@@ -30,10 +31,10 @@ namespace Wpf
         private List<User> friendsList = new List<User>();
         private List<StackPanel> spList = new List<StackPanel>();
 
-        private SolidColorBrush[] blueColors = new SolidColorBrush[3];
-        private SolidColorBrush[] greyColors = new SolidColorBrush[3];
-        string[] blueHex = new string[] { "#5978f2", "#3455d8", "#4286f4" };
-        string[] grey = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
+        private SolidColorBrush[] defaultColors = new SolidColorBrush[3];
+        private SolidColorBrush[] alternativeColors = new SolidColorBrush[3];
+        string[] defaultHex = new string[] { "#6B7A8F", "#DCC7AA", "#F7882F" };
+        string[] alternativeHex = new string[] { "#597392", "#3a75d8", "#4ef6f4" };
 
         private Button changeImgBtn = new Button();
         private Button saveBtn = new Button();
@@ -68,10 +69,10 @@ namespace Wpf
 
             this.FontSize = 16;
 
-            InitColor(blueColors, blueHex);
-            InitColor(greyColors, grey);
+            InitColor(defaultColors, defaultHex);
+            InitColor(alternativeColors, alternativeHex);
 
-            SetBackgroundColor(blueColors);
+            SetBackgroundColor(defaultColors);
 
             sendCall_Grid.Visibility = Visibility.Hidden;
 
@@ -121,9 +122,9 @@ namespace Wpf
         private void ChangeColor(object sender, RoutedEventArgs e)
         {
             if (sender.Equals(btnBlue))
-                SetBackgroundColor(blueColors);
+                SetBackgroundColor(defaultColors);
             else
-                SetBackgroundColor(greyColors);
+                SetBackgroundColor(alternativeColors);
 
             btnBlue.IsEnabled = !btnBlue.IsEnabled;
             btnVio.IsEnabled = !btnVio.IsEnabled;
@@ -250,11 +251,13 @@ namespace Wpf
             DateTime dateTime = DateTime.Now;
             User friend = GetCurrentFriend();
 
-            friend.MessageSent = tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
+            string dateLine = tBoxName.Text + ": " + dateTime.ToString("dd.MM.yy hh:mm") + "\n" + InputBox.Text + "\n";
+
+            friend.MessageSent = dateLine;
             //friend.CurrMessageAmount++;
             friend.AmountSent++;
             //ShowInputBlock.Text += friendsList[i].Message;
-            ShowInputBlock.Text += tBoxName.Text + dateTime.ToString("\nhh:mm    ") + InputBox.Text + "\n";
+            ShowInputBlock.Text += dateLine;
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();
 
@@ -291,8 +294,8 @@ namespace Wpf
             friendsList.Remove(friend);
 
             sendCall_Grid.Visibility = Visibility.Hidden;
-            //InputBox.Visibility = Visibility.Hidden;
-            //chat_Grid.Visibility = Visibility.Hidden;
+            InputBox.Visibility = Visibility.Hidden;
+            chat_Grid.Visibility = Visibility.Hidden;
 
             CreateSPItem();
             friendsView.ItemsSource = spList;
@@ -507,13 +510,26 @@ namespace Wpf
         /// </summary>
         public void SetInformation()
         {
-            friendsView.Visibility = Visibility.Collapsed;
+            Animation(0);
+            //friendsView.Visibility = Visibility.Collapsed;
             Info.Background = new SolidColorBrush(Colors.White);
             tBoxEditName.Text = tBoxName.Text;
             lbTag.Content = "#1236";
-            lbDate.Content = DateTime.Now.ToString();
+            lbDate.Content = DateTime.Now.ToString("dd-MM-yyyy");
             lbTotalFriends.Content = friendsList.Count;
         }
+
+        private void Animation(int width)
+        {
+            DoubleAnimation db = new DoubleAnimation();
+            db.To = width;
+            db.Duration = TimeSpan.FromSeconds(0.5);
+            db.AutoReverse = false;
+            db.RepeatBehavior = new RepeatBehavior(1);
+            friendsView.BeginAnimation(StackPanel.WidthProperty, db);
+
+        }
+        
         /// <summary>
         /// Shows the user's information e.g. name, message amount, tag, etc
         /// </summary>
@@ -529,11 +545,15 @@ namespace Wpf
             }
             else
             {
-                friendsView.Visibility = Visibility.Visible;
+                //friendsView.Visibility = Visibility.Visible;
+                Animation(250);
+                
                 DeleteButtonsInInfo();
                 isInfoOn = false;
             }
         }
+
+        
         /// <summary>
         /// Change the user information
         /// </summary>
@@ -606,7 +626,6 @@ namespace Wpf
             tBoxEditName.IsReadOnly = true;
             DeleteButtonsInInfo();
         }
-
         /// <summary>
         /// Open a filedialog for changing the image
         /// </summary>
@@ -637,19 +656,23 @@ namespace Wpf
             {
                 friendsView.UnselectAll();
             }
-                
-
         }
-
         private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
         {
-            ppuSetting.IsOpen = true;
+            ppuSetName.IsOpen = true;
         }
 
         private void btnSetting_MouseLeave(object sender, MouseEventArgs e)
         {
-            ppuSetting.IsOpen = false;
+            ppuSetName.IsOpen = false;
         }
+
+        private void popUpSetting_MouseLeave(object sender, MouseEventArgs e)
+        {
+            popUpSetting.IsOpen = false;
+        }
+
+       
     }
 }
         

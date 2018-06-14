@@ -77,9 +77,8 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border BorderThickness="10">
-                    <TextBlock Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
-                </Border>
+                
+                <TextBlock Background="Orange" Margin="10" Text="Friendlist" FontSize="16" VerticalAlignment="Center"/>
                 <Border BorderThickness="10">
                     <Button x:Name="addBtn" Width="30" Height="30" HorizontalAlignment="Right" 
                             Content="{StaticResource addImg}" Style="{StaticResource MyButton}"/>
@@ -135,18 +134,21 @@
                     <Label x:Name="lbTotalFriends" Grid.Row="3" Grid.Column="1"/>
                 </Grid>
                 <ListView x:Name="friendsView" SelectionMode="Single" MouseDown="friendsView_MouseDown" 
-                          SelectionChanged="SelectFriend" Grid.Row="1">
+                          SelectionChanged="SelectFriend" Grid.Row="1" HorizontalAlignment="Left" Width="250" >
                 </ListView>
             </Grid>
 
             <Button x:Name="btnSetting" Grid.Row="2" Margin="160,10,30,10" Content="{StaticResource SettingImg}"  
-                     Click="Settings" Style="{StaticResource MyButton}" MouseEnter="btnSetting_MouseEnter" MouseLeave="btnSetting_MouseLeave"/>
-            <Popup x:Name="ppuSetting" PlacementTarget="{Binding ElementName= btnSetting}" Placement="Right">
+                     Click="Settings" Style="{StaticResource MyButton}" MouseEnter="btnSetting_MouseEnter" MouseLeave="btnSetting_MouseLeave">
+            </Button>
+            <Popup x:Name="ppuSetName" PlacementTarget="{Binding ElementName= btnSetting}" Placement="Right">
                 <TextBlock Text="Setting" Background="White"/>
+                
             </Popup>
             <Button Content="Info" Grid.Row="2" Margin="30,10,160,10" Click="ShowUserInfo"/>
             <Popup x:Name="popUpSetting" PlacementTarget="{Binding ElementName= btnSetting}"
-                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True" MouseLeave="btnSetting_MouseLeave">
+                   Placement="Top" PopupAnimation="Scroll" AllowsTransparency="True" 
+                   MouseLeave="popUpSetting_MouseLeave">
                 <TextBlock Height="200" Width="210" Background="Transparent" >
                     <StackPanel Orientation="Vertical"  Margin="10">
                         
@@ -246,6 +248,7 @@
             </Border>
         </Grid>
 
-        <Grid x:Name="right_Grid" Grid.Column="2"/>
+        <Grid x:Name="right_Grid" Grid.Column="2">
+        </Grid>
     </Grid>
 </Window>
