@@ -28,15 +28,8 @@ namespace Wpf
         public demoExample()
         {
             InitializeComponent();
-            //adding series will update and animate the chart automatically
-            //SeriesCollection.Add(new ColumnSeries
-            //{
-            //    Title = "2016",
-            //    Values = new ChartValues<double> { 11, 56, 42 }
-            //});
 
-            //also adding values updates and animates the chart automatically
-            //SeriesCollection[1].Values.Add(48d);
+            btn1.Click += ShowText;
             btn3.Click += ShowPopUp;
             btnmation.Click += AnimationBorder;
 
@@ -46,6 +39,23 @@ namespace Wpf
             i.IsBackground = true;
 
             i.Start();
+        }
+
+        private void ShowText(object sender, RoutedEventArgs e)
+        {
+            tb.Visibility = Visibility.Visible;
+            Button b = sender as Button;
+            b.Click -= ShowText;
+            b.Click += HideText;
+        }
+
+        private void HideText(object sender, RoutedEventArgs e)
+        {
+
+            tb.Visibility = Visibility.Hidden;
+            Button b = sender as Button;
+            b.Click += ShowText;
+            b.Click -= HideText;
         }
 
         private void AnimationBorder(object sender, RoutedEventArgs e)
@@ -87,13 +97,7 @@ namespace Wpf
 
     
         private delegate void ChangeWin(string text);
-
-        //private void ClickEvent(object sender, RoutedEventArgs e)
-        //{
-        //    string text = GetActiveWindowTitle();
-        //    actWind.Text = text;
-        //}
-
+        
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")]
@@ -119,10 +123,10 @@ namespace Wpf
                 }
             }
         }
-            private void ChangeText(string text)
-            {
-                actWind.Text = text;
-            }
+        private void ChangeText(string text)
+        {
+            actWind.Text = text;
+        }
 
     
         private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
@@ -148,46 +152,6 @@ namespace Wpf
             db.RepeatBehavior = new RepeatBehavior(1);
             sp.BeginAnimation(StackPanel.HeightProperty, db);
         }
-
-
-
-
-        //private void ShowStats(object sender, RoutedEventArgs e)
-        //{
-        //    SeriesCollection = new SeriesCollection
-        //    {
-        //        new ColumnSeries
-        //        {
-        //            Title = "2015",
-        //            Values = new ChartValues<double> { 10, 50, 39, 50 }
-        //        }
-        //    };
-
-
-        //    Labels = new[] { "Monday", "Tuesday", "Wendesday", "Thursday", "Friday" };
-        //    Formatter = value => value.ToString();
-
-        //    DataContext = this;
-
-        //}
-        public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> Formatter { get; set; }
-
-        private void listv_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Button btn1 = new Button();
-            btn1.Content = "C";
-            btn1.Width = 20;
-            btn1.Height = btn1.Width;
-            Grid.SetColumn(btn1,1);
-            Grid.SetRow(btn1, 1);
-
-            G.Children.Add(btn1);
-
-            btn1.Click += OpenText;
-        }
-
         private void OpenText(object sender, RoutedEventArgs e)
         {
             TextBlock tb = new TextBlock();
@@ -197,19 +161,6 @@ namespace Wpf
 
             
         }
-
-        private void EnterKey(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                if (inBox.Text == "")
-                    return;
-
-                tbView.Text += inBox.Text + "\n";
-                inBox.Text = String.Empty;
-            }
-        }
-
         private void ppu2_MouseLeave(object sender, MouseEventArgs e)
         {
 

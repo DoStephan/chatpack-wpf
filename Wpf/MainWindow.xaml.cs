@@ -13,6 +13,9 @@ using LiveCharts.Wpf;
 using System.Media;
 using System.Text;
 using System.Windows.Media.Animation;
+using LiveCharts.Defaults;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 //using System.Data;
 
@@ -44,6 +47,11 @@ namespace Wpf
 
         private int[] statusAmount = new int[] { 1, 5, 10 };
 
+        private delegate void ChangeWin(string text);
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         #endregion
         #region Propeties
@@ -61,7 +69,6 @@ namespace Wpf
         public object SeriersCollection { get; private set; }
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
-        public Func<object, object> Formatter { get; set; }
         #endregion
         public MainWindow()
         {
@@ -97,8 +104,32 @@ namespace Wpf
             btnBlue.IsEnabled = false;
             currImageBrush = (ImageBrush)profPic.Fill;
 
-        }
+            Thread statusThread = new Thread(GetActiveWindowTitle);
+            statusThread.IsBackground = true;
 
+            statusThread.Start();
+
+        }
+        private void GetActiveWindowTitle()
+        {
+
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            while (true)
+            {
+                IntPtr handle = GetForegroundWindow();
+                if (GetWindowText(handle, Buff, nChars) > 0)
+                {
+                    ChangeWin dele = new ChangeWin(ChangeText);
+                    Thread.Sleep(700);
+                    Status.Dispatcher.BeginInvoke(dele, Buff.ToString());
+                }
+            }
+        }
+        private void ChangeText(string text)
+        {
+            Status.Text = text;
+        }
         private void InitColor(SolidColorBrush[] br, string[] colors)
         {
             Color c;
@@ -253,15 +284,16 @@ namespace Wpf
 
             string dateLine = tBoxName.Text + ": " + dateTime.ToString("dd.MM.yy hh:mm") + "\n" + InputBox.Text + "\n";
 
-            friend.MessageSent = dateLine;
-            //friend.CurrMessageAmount++;
+            friend.CurrMessageAmount++;
             friend.AmountSent++;
             //ShowInputBlock.Text += friendsList[i].Message;
             ShowInputBlock.Text += dateLine;
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();
 
+            UpdateChart();
         }
+
         /// <summary>
         /// Creates the two button remove and stats
         /// </summary>
@@ -290,16 +322,21 @@ namespace Wpf
         private void Removefriend(object sender, RoutedEventArgs e)
         {
             User friend = GetCurrentFriend();
-            
             friendsList.Remove(friend);
-
-            sendCall_Grid.Visibility = Visibility.Hidden;
-            InputBox.Visibility = Visibility.Hidden;
-            chat_Grid.Visibility = Visibility.Hidden;
 
             CreateSPItem();
             friendsView.ItemsSource = spList;
+
+            sendCall_Grid.Visibility = Visibility.Hidden;
+            InputBox.Visibility = Visibility.Hidden;
+            Chat_Border.Visibility = Visibility.Hidden;
+            messageChart.Visibility = Visibility.Hidden;
+            right_Grid.Children.Clear();
         }
+        
+
+
+
         /// <summary>
         /// Shows the friend's name, image and 2 buttons
         /// </summary>
@@ -314,10 +351,6 @@ namespace Wpf
             spNameTag.VerticalAlignment = VerticalAlignment.Center;
             StackPanel mainSP = new StackPanel();
             mainSP.Orientation = Orientation.Horizontal;
-
-            sendCall_Grid.Visibility = Visibility.Visible;
-            InputBox.Visibility = Visibility.Visible;
-            chat_Grid.Visibility = Visibility.Visible;
 
             //Create name and Tag
             TextBlock tbName = new TextBlock();
@@ -382,6 +415,11 @@ namespace Wpf
 
             remStatGrid.Children.Add(remBtnBdr);
             remStatGrid.Children.Add(statsBtnBdr);
+
+            sendCall_Grid.Visibility = Visibility.Visible;
+            InputBox.Visibility = Visibility.Visible;
+            Chat_Border.Visibility = Visibility.Visible;
+
         }
         /// <summary>                 
         /// Shows the stats
@@ -396,32 +434,43 @@ namespace Wpf
 
             btn.Click -= ShowStats;
             btn.Click += ShowChat;
-            
-            ShowInputBlock.Visibility = Visibility.Collapsed;
 
             GenerateStatusInfo();
 
+            CreateStats();    
+
+            sendCall_Grid.Visibility = Visibility.Hidden;
+            InputBox.Visibility = Visibility.Hidden;
+            Chat_Border.Visibility = Visibility.Hidden;
+            messageChart.Visibility = Visibility.Visible;
+
+        }
+
+        private void CreateStats()
+        {
+            Labels = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
             User u = GetCurrentFriend();
 
-            //messageChart.Update(true);
-            
+            u.ObserveValueMessage = new ObservableValue(u.CurrMessageAmount);
 
             SeriesCollection = new SeriesCollection
             {
                 new ColumnSeries
                 {
-                    Values = new ChartValues<double> { u.CurrMessageAmount }//, 50, 39, 50, 35 }
+                    Values = new ChartValues<ObservableValue> { u.ObserveValueMessage }//, 50, 39, 50, 35 }
                 }
             };
 
-            Labels = new[] { "Monday" };//, "Tuesday", "Wednesday", "Thursday", "Friday" };
-            Formatter = value => value.ToString();
-
-            //DataContext = this;
             DataContext = this;
-            
         }
 
+        private void UpdateChart()
+        {
+            User u = GetCurrentFriend();
+            u.ObserveValueMessage.Value++;
+            messageChart.Update(true);
+
+        }
         private User GetCurrentFriend()
         {
             for (int i = 0; i < friendsList.Count; i++)
@@ -445,8 +494,10 @@ namespace Wpf
             btn.Content = "Stats";
             btn.Click -= ShowChat;
             btn.Click += ShowStats;
-            ShowInputBlock.Visibility = Visibility.Visible;
 
+            sendCall_Grid.Visibility = Visibility.Visible;
+            InputBox.Visibility = Visibility.Visible;
+            Chat_Border.Visibility = Visibility.Visible;
             right_Grid.Children.Clear();
 
         }
@@ -481,17 +532,17 @@ namespace Wpf
 
         private string CreateStatus(User friend)
         {
-            string status = "";
+            string status = "Friendship: ";
 
             if (friend.GetTotalMessages() < statusAmount[0])
-                status = "Bekannter";
+                status += "Acquaintance";
             else if (friend.GetTotalMessages() > statusAmount[1])
-                status = "Buddy";
+                status += "Buddies";
 
             //else if (friend.GetTotalMessages() > statusAmount[2] && friend.GetTotalMessages() < statusAmount[1])
             //    status = "ABF";
             else
-                status = "Freunde";
+                status += "Friends";
 
             return status;
         }
@@ -643,36 +694,24 @@ namespace Wpf
 
                 profPic.Fill = tempImgBrush;
             }
-        }        
-        /// <summary>
-        /// Unselect a friend by clicking somewhere else
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void friendsView_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            HitTestResult r = VisualTreeHelper.HitTest(this, e.GetPosition(this));
-            if (r.VisualHit.GetType() != typeof(ListBoxItem))
-            {
-                friendsView.UnselectAll();
-            }
         }
+        
+        #region PopUp methods
         private void btnSetting_MouseEnter(object sender, MouseEventArgs e)
         {
             ppuSetName.IsOpen = true;
         }
-
         private void btnSetting_MouseLeave(object sender, MouseEventArgs e)
         {
             ppuSetName.IsOpen = false;
         }
-
         private void popUpSetting_MouseLeave(object sender, MouseEventArgs e)
         {
             popUpSetting.IsOpen = false;
         }
+        #endregion
 
-       
+        
     }
 }
         

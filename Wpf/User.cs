@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiveCharts.Defaults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +14,20 @@ namespace Wpf
         private string _name;
         private string _tag;
         private BitmapImage _img;
-        private string _messageSent = "";
-        private string _messageReceive = "";
+        //EEEE
+        //only one messageContainer
+        private string _messageReceive;
+        private string _messageSent;
         private int _amountSent = 0;
         private int _amountReceive = 0;
         private DateTime _friendsSince;
         private double _currMessageAmount = 0;
+        private ObservableValue observeValueMessage;
+
 
         public User(string name, string tag)
         {
+            observeValueMessage = new ObservableValue(0);
             _name = name;
             _tag = tag;
             _img = new BitmapImage(new Uri(@"C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\ProfilePicture\default.png"));
@@ -123,6 +129,19 @@ namespace Wpf
             set
             {
                 _amountReceive = value;
+            }
+        }
+
+        public ObservableValue ObserveValueMessage
+        {
+            get
+            {
+                return observeValueMessage;
+            }
+
+            set
+            {
+                observeValueMessage = value;
             }
         }
         #endregion
