@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using LiveCharts.Defaults;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 //using System.Data;
 
@@ -280,13 +281,18 @@ namespace Wpf
         }
         public void SendMessage()
         {
-            if (InputBox.Text == "")
+            Regex reg = new Regex(@"\w+");
+
+            if (!reg.IsMatch(InputBox.Text))
+            {
+                InputBox.Text = String.Empty;
                 return;
-            
+            }
+
             DateTime dateTime = DateTime.Now;
             User friend = GetCurrentFriend();
 
-            string dateLine = tBoxName.Text + ": " + dateTime.ToString("dd.MM.yy hh:mm") + "\n" + InputBox.Text + "\n";
+            string dateLine = tBoxName.Text + ": " + dateTime.ToString("dd.MM.yy hh:mm") + "\n" + "    " +InputBox.Text + "\n";
 
             friend.CurrMessageAmount++;
             friend.AmountSent++;

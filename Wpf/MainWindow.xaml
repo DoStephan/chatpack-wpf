@@ -209,7 +209,7 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Status here" VerticalAlignment="Top" Margin="20,0,0,0" Visibility="Hidden"/>
             <!--status zum stackpanel vom seletion hinzufügen -->
 
-            <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="14">
+            <Border  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="10">
                 <Grid>
                     <lvc:CartesianChart x:Name="messageChart" Series="{Binding SeriesCollection}" 
                                         LegendLocation="Left" Visibility="Hidden">
@@ -224,13 +224,13 @@
             </Border>
 
             <Border x:Name="Chat_Border" Visibility="Hidden" 
-                    Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="14" >
+                    Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="10" >
                
                     <ScrollViewer x:Name="scrollView"  ScrollViewer.VerticalScrollBarVisibility="Auto"
                       Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4">
 
-                        <TextBox x:Name="ShowInputBlock"
-                             FontSize="22" Background="White" IsReadOnly="True"/>
+                        <TextBox x:Name="ShowInputBlock" FontSize="22" Background="White" 
+                                 IsReadOnly="True" TextWrapping="Wrap"/>
                     </ScrollViewer>
               
             </Border>
@@ -241,15 +241,15 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Border BorderThickness="0,14,0,14">
+                <Border BorderThickness="0,10,0,10">
                     <Button x:Name="sendBtn" Width="40" Content="Send" Click="SendingMessage" />
                 </Border>
-                <Border Grid.Column="1" BorderThickness="0,14,0,14">
+                <Border Grid.Column="1" BorderThickness="0,10,0,10">
                     <Button Width="40" Content="{StaticResource CallImg}" Style="{StaticResource MyButton}"/>
                 </Border>
             </Grid>
 
-            <Border  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="14">
+            <Border  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="10">
                 <TextBox x:Name="InputBox" TextAlignment="Left" VerticalContentAlignment="Center"
                     FontSize="22" KeyDown="OnKeyEnterHandler" Visibility="Hidden">
                 </TextBox>
