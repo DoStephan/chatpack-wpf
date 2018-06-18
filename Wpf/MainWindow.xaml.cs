@@ -74,6 +74,7 @@ namespace Wpf
         {
             InitializeComponent();
 
+           
             this.FontSize = 16;
 
             InitColor(defaultColors, defaultHex);
@@ -104,6 +105,8 @@ namespace Wpf
             btnBlue.IsEnabled = false;
             currImageBrush = (ImageBrush)profPic.Fill;
 
+            //InputBox.MaxLength = center_Grid
+
             Thread statusThread = new Thread(GetActiveWindowTitle);
             statusThread.IsBackground = true;
 
@@ -126,6 +129,7 @@ namespace Wpf
                 }
             }
         }
+        
         private void ChangeText(string text)
         {
             Status.Text = text;
@@ -231,7 +235,7 @@ namespace Wpf
 
                 else
                     friend = new User(elem[0], elem[1], elem[2]);
-
+                
                 friendsList.Add(friend);
             }
             friendsList.Sort();
@@ -286,7 +290,7 @@ namespace Wpf
 
             friend.CurrMessageAmount++;
             friend.AmountSent++;
-            //ShowInputBlock.Text += friendsList[i].Message;
+            friend.MessageSent = dateLine;
             ShowInputBlock.Text += dateLine;
             InputBox.Text = String.Empty;
             scrollView.ScrollToEnd();

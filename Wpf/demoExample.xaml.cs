@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.Windows.Media.Animation;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.IO;
 
 namespace Wpf
 {
@@ -33,6 +34,18 @@ namespace Wpf
             btn3.Click += ShowPopUp;
             btnmation.Click += AnimationBorder;
 
+            string path1 = Directory.GetCurrentDirectory();
+            path1 = Directory.GetParent(path1).ToString();
+            path1 = Directory.GetParent(path1).ToString();
+
+            //string filter = @"\Debug";
+
+
+            tb2.Text = path1;
+            
+
+            //BitmapImage img = new BitmapImage(new Uri(@"\ProfilePicture\default.png", UriKind.Relative));
+            //Img.Source = img;
 
 
             Thread i = new Thread(GetActiveWindowTitle);

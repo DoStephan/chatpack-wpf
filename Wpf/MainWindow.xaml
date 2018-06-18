@@ -8,10 +8,12 @@
         mc:Ignorable="d"
         Title="ChatPack" Height="Auto" Width="Auto" 
         MinHeight="600" MinWidth="950" WindowState="Maximized"
-        >
-    <!--Icon="./Wpf/joy.png"-->
+        Icon="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\Gringo44.ico"
+        >                                                                                                                                                                                                                                                                               
+        
 
     <Window.Resources>
+        
 	
         <Image x:Key="SettingImg" Source="pack://siteoforigin:,,,/ButtonImage/gear.png"/>
         <Image x:Key="CallImg" Source="pack://siteoforigin:,,,/ButtonImage/phone.png"/>
