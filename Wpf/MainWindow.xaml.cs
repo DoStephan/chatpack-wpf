@@ -75,20 +75,22 @@ namespace Wpf
         {
             InitializeComponent();
 
-           
+            string path = Directory.GetCurrentDirectory();
+            path = Directory.GetParent(path).ToString();
+            path = Directory.GetParent(path).ToString();
+
             this.FontSize = 16;
+            this.Icon = new BitmapImage(new Uri(path + @"\ProfilePicture\sales.png"));
 
             InitColor(defaultColors, defaultHex);
             InitColor(alternativeColors, alternativeHex);
 
             SetBackgroundColor(defaultColors);
 
-            sendCall_Grid.Visibility = Visibility.Hidden;
-
             #region User profile
             ImageBrush myBrush = new ImageBrush();
-            myBrush.ImageSource = new BitmapImage(new Uri("smittyWerbenJaggerManJensen.jpg", UriKind.Relative));
-            myBrush.Stretch = Stretch.UniformToFill;        //@"C:\Users\Stephan\Desktop\lsad\Wpf\ProfilePicture\smittyWerbenJaggerManJensen.jpg"
+            myBrush.ImageSource = new BitmapImage(new Uri(path + @"\ProfilePicture\default.png"));
+            myBrush.Stretch = Stretch.UniformToFill;
             profPic.Fill = myBrush;
             profPic.Height = 60;
             profPic.Width = 60;
@@ -101,6 +103,7 @@ namespace Wpf
             CreateSPItem();
             friendsView.ItemsSource = spList;
 
+            sendCall_Grid.Visibility = Visibility.Hidden;
             addBtn.Click += TypeTagNumber;
 
             btnBlue.IsEnabled = false;
@@ -114,6 +117,8 @@ namespace Wpf
             statusThread.Start();
 
         }
+        
+
         private void GetActiveWindowTitle()
         {
 
@@ -526,7 +531,7 @@ namespace Wpf
             }
             User friend = GetCurrentFriend();
             
-            tb[0].Text = "Friends since: " + DateTime.Today;
+            tb[0].Text = "Friends since: " + DateTime.Today.ToString("dd.MM.yyyy");
             tb[1].Text = "Messages sent: " + friend.AmountSent;
             tb[2].Text = "Messages received: " + friend.AmountReceive;
             tb[3].Text = "Total Messages: " + friend.GetTotalMessages();
@@ -576,7 +581,7 @@ namespace Wpf
             Info.Background = new SolidColorBrush(Colors.White);
             tBoxEditName.Text = tBoxName.Text;
             lbTag.Content = "#1236";
-            lbDate.Content = DateTime.Now.ToString("dd-MM-yyyy");
+            lbDate.Content = DateTime.Now.ToString("dd.MM.yyyy");
             lbTotalFriends.Content = friendsList.Count;
         }
 
@@ -606,15 +611,11 @@ namespace Wpf
             }
             else
             {
-                //friendsView.Visibility = Visibility.Visible;
                 Animation(250);
-                
                 DeleteButtonsInInfo();
                 isInfoOn = false;
             }
         }
-
-        
         /// <summary>
         /// Change the user information
         /// </summary>

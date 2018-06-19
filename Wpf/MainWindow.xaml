@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="ChatPack" Height="Auto" Width="Auto" 
         MinHeight="600" MinWidth="950" WindowState="Maximized"
-        Icon="C:\Schule\3Klasse\syp\repositories\chatpack-wpf\Wpf\Gringo44.ico"
+        
         >                                                                                                                                                                                                                                                                               
         
 
@@ -49,7 +49,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="left_Grid" >

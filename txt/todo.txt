@@ -1,0 +1,6 @@
+
+sql für stats
+status
+
+
+sql erstellen -> Datei erstellen
